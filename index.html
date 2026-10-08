@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CGPSC Curated Notes Prompt Studio</title>
+<style>
+:root{
+  --bg:#f5f7fb; --card:#fff; --ink:#172033; --muted:#667085;
+  --primary:#4f46e5; --primary2:#7c3aed; --line:#e5e7eb;
+  --good:#047857; --warn:#b45309; --danger:#b91c1c;
+  --shadow:0 12px 35px rgba(15,23,42,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f3f5f9;color:var(--ink)}
+header{background:linear-gradient(135deg,#111827,#312e81 55%,#6d28d9);color:white;padding:34px 24px 42px}
+.header-inner{max-width:1250px;margin:auto}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.75;font-weight:800}
+h1{font-size:clamp(28px,4vw,46px);margin:8px 0 10px;line-height:1.05}
+header p{max-width:850px;margin:0;color:#e5e7eb;line-height:1.65}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.badge{padding:7px 11px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.09);border-radius:999px;font-size:12px}
+.app{max-width:1250px;margin:-22px auto 50px;padding:0 18px;display:grid;grid-template-columns:380px 1fr;gap:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.controls{padding:22px;position:sticky;top:15px;height:max-content}
+.section-title{font-size:14px;font-weight:800;margin:0 0 14px}
+.field{margin-bottom:17px}
+label{display:block;font-size:12px;font-weight:800;color:#475467;margin-bottom:7px}
+select,input,textarea{width:100%;border:1px solid #d0d5dd;border-radius:11px;padding:11px 12px;background:white;color:var(--ink);font:inherit;outline:none}
+select:focus,input:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(79,70,229,.12)}
+textarea{min-height:105px;resize:vertical}
+.small{font-size:11px;color:var(--muted);line-height:1.5;margin-top:5px}
+.checks{display:grid;gap:8px}
+.check{display:flex;align-items:center;gap:9px;font-size:12px;color:#344054}
+.check input{width:auto}
+button{border:0;border-radius:11px;padding:11px 14px;font-weight:800;cursor:pointer;font:inherit}
+.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff}
+.secondary{background:#eef2ff;color:#3730a3}
+.ghost{background:#f8fafc;border:1px solid var(--line);color:#344054}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+.output{display:none}
+.output-head{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.output-head h2{margin:0;font-size:18px}
+.status{font-size:11px;color:var(--good);font-weight:800}
+.prompt-wrap{padding:20px}
+.prompt{min-height:650px;font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;font-size:12px;line-height:1.65;background:#0b1020;color:#dbeafe;border-radius:14px;padding:20px;white-space:pre-wrap;overflow:auto}
+.info{padding:14px 16px;background:#f8fafc;border:1px solid var(--line);border-radius:12px;margin-bottom:16px}
+.info strong{display:block;font-size:12px;margin-bottom:5px}
+.info span{font-size:12px;color:#667085;line-height:1.5}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.kpi div{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:10px}
+.kpi b{display:block;font-size:14px}
+.kpi span{font-size:10px;color:var(--muted)}
+footer{max-width:1250px;margin:0 auto 35px;padding:0 18px;color:var(--muted);font-size:11px}
+@media(max-width:900px){.app{grid-template-columns:1fr}.controls{position:relative;top:auto}.kpi{grid-template-columns:1fr}}
+
+/* ===== PREMIUM DASHBOARD OVERRIDES ===== */
+:root{--navy:#111827;--violet:#635bff;--violet2:#8b5cf6;--soft:#f7f7ff}
+header{padding:0;background:linear-gradient(120deg,#101426 0%,#1d2340 48%,#44318a 100%);position:relative;overflow:hidden}
+header:after{content:"";position:absolute;width:520px;height:520px;border-radius:50%;right:-180px;top:-260px;background:rgba(139,92,246,.20);filter:blur(2px)}
+.header-inner{padding:34px 24px 88px;position:relative;z-index:1}
+.eyebrow{color:#b9b7ff}
+h1{font-weight:850;letter-spacing:-.04em}
+.app{max-width:1320px;margin:-52px auto 55px;display:flex;justify-content:center;position:relative;z-index:2}
+.card{border:1px solid #e6e8f0;border-radius:22px;box-shadow:0 20px 55px rgba(15,23,42,.09)}
+.controls{width:min(820px,100%);padding:30px;background:rgba(255,255,255,.97);animation:dashboardIn .65s cubic-bezier(.2,.8,.2,1) both}
+.section-title{font-size:16px;letter-spacing:-.01em}
+.section-sub{font-size:11px;color:#98a2b3;margin:-8px 0 20px}
+.field{margin-bottom:15px}
+.field label{font-size:10px;letter-spacing:.08em;color:#667085}
+select,input{height:44px;border-radius:12px;border-color:#dfe3ec;background:#fbfcfe}
+select{cursor:pointer}
+select:hover,input:hover{border-color:#b9b7ff}
+.step{display:flex;align-items:center;gap:10px;margin:18px 0 9px}
+.stepnum{width:25px;height:25px;border-radius:8px;background:#ede9fe;color:#5b21b6;display:grid;place-items:center;font-size:11px;font-weight:900}
+.stepname{font-size:12px;font-weight:850}
+.subject-chip{font-size:11px;color:#667085}
+.checks{grid-template-columns:1fr 1fr}
+.check{padding:8px 9px;border:1px solid #edf0f5;border-radius:9px;background:#fafbfc}
+.actions button{flex:1;min-width:120px}
+.primary{box-shadow:0 8px 18px rgba(99,91,255,.24)}
+.kpi{grid-template-columns:repeat(3,1fr)}
+.kpi div{background:linear-gradient(180deg,#fff,#f8f9fd);padding:12px}
+.output{display:none!important;min-width:0;background:#fff}
+.output-head{padding:17px 20px;background:#fff;position:sticky;top:0;z-index:2}
+.output-head h2{font-size:16px}
+.status{background:#ecfdf3;padding:5px 8px;border-radius:999px}
+.prompt-wrap{padding:18px}
+.info{background:linear-gradient(135deg,#f7f7ff,#faf8ff);border-color:#e9e5ff}
+.prompt{min-height:680px;border-radius:16px;background:#0b1020;box-shadow:inset 0 1px 0 rgba(255,255,255,.05);font-size:11.5px}
+.selection-pill{display:inline-flex;align-items:center;gap:5px;background:#eef2ff;color:#4338ca;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:800;margin-top:8px}
+.subtopic-empty{color:#98a2b3;font-style:italic}
+@media(max-width:960px){.app{display:block;margin-top:-35px}.controls{position:relative}}
+
+/* ===== CINEMATIC DASHBOARD MOTION ===== */
+body{
+  background:
+    radial-gradient(circle at 15% 20%, rgba(99,91,255,.09), transparent 28%),
+    radial-gradient(circle at 85% 75%, rgba(139,92,246,.08), transparent 30%),
+    #f3f5f9;
+  overflow-x:hidden;
+}
+body:before, body:after{
+  content:"";
+  position:fixed;
+  width:340px;height:340px;border-radius:50%;
+  pointer-events:none;z-index:-1;
+  filter:blur(55px);
+  opacity:.18;
+  animation:orbFloat 9s ease-in-out infinite alternate;
+}
+body:before{background:#7c3aed;left:-180px;top:25vh}
+body:after{background:#4f46e5;right:-180px;bottom:8vh;animation-delay:-4s}
+header:before{
+  content:"";
+  position:absolute;inset:-40%;
+  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.07) 45%,transparent 55%);
+  transform:translateX(-55%) rotate(8deg);
+  animation:shineSweep 7s ease-in-out infinite;
+}
+.badge{
+  transition:transform .25s ease, background .25s ease, border-color .25s ease;
+}
+.badge:hover{transform:translateY(-3px) scale(1.03);background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.35)}
+.controls{
+  position:relative;
+  overflow:hidden;
+  backdrop-filter:blur(14px);
+}
+.controls:before{
+  content:"";
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.8),transparent 45%);
+}
+.controls > *{position:relative;z-index:1}
+.stepnum{
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.step:hover .stepnum{
+  transform:rotate(-6deg) scale(1.12);
+  box-shadow:0 7px 18px rgba(99,91,255,.18);
+}
+select,input{
+  transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+select:focus,input:focus{
+  transform:translateY(-1px);
+}
+.check{
+  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.check:hover{
+  transform:translateY(-2px);
+  border-color:#d8d3ff;
+  box-shadow:0 8px 20px rgba(15,23,42,.06);
+}
+button{
+  transition:transform .22s ease, box-shadow .22s ease, filter .22s ease;
+}
+button:hover{
+  transform:translateY(-2px);
+  filter:saturate(1.08);
+}
+button:active{transform:translateY(0) scale(.98)}
+.primary{
+  position:relative;
+  overflow:hidden;
+}
+.primary:after{
+  content:"";
+  position:absolute;top:-60%;left:-30%;width:35%;height:220%;
+  background:rgba(255,255,255,.25);
+  transform:rotate(18deg);
+  animation:buttonShine 4.5s ease-in-out infinite;
+}
+.kpi div{
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.kpi div:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 25px rgba(15,23,42,.08);
+}
+@keyframes dashboardIn{
+  from{opacity:0;transform:translateY(24px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes orbFloat{
+  from{transform:translate3d(0,-15px,0) scale(.92)}
+  to{transform:translate3d(35px,25px,0) scale(1.08)}
+}
+@keyframes shineSweep{
+  0%,55%{transform:translateX(-55%) rotate(8deg)}
+  100%{transform:translateX(85%) rotate(8deg)}
+}
+@keyframes buttonShine{
+  0%,65%{left:-35%}
+  100%{left:125%}
+}
+@media(max-width:960px){
+  .app{display:flex;justify-content:center;margin-top:-35px}
+  .controls{position:relative;width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation:none!important;transition:none!important}
+}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="eyebrow">CGPSC • Notes Engineering</div>
+    <h1>Curated Notes Prompt Studio</h1>
+    <p>Select your syllabus path and build a precision CGPSC prompt — with subject-specific visual intelligence, 3D-style diagram instructions and exam-first curation.</p>
+    <div class="badges">
+      <span class="badge">Syllabus-locked</span><span class="badge">CG-focused</span>
+      <span class="badge">Prelims + Mains</span><span class="badge">PYQ-aware</span>
+      <span class="badge">3D Visual HTML</span>
+    </div>
+  </div>
+</header>
+
+<main class="app">
+  <section class="card controls">
+    <div class="section-title">1. Build your note request</div>
+
+    <div class="step"><span class="stepnum">A</span><span class="stepname">Choose paper</span></div>
+    <div class="field">
+      <label for="paper">PAPER / PART</label>
+      <select id="paper"></select>
+    </div>
+
+    <div class="step"><span class="stepnum">B</span><span class="stepname">Choose subject</span></div>
+    <div class="field">
+      <label for="subject">SUBJECT</label>
+      <select id="subject"></select>
+    </div>
+
+    <div class="step"><span class="stepnum">1</span><span class="stepname">Select your syllabus path</span></div>
+    <div class="field">
+      <label for="topic">TOPIC / SYLLABUS UNIT</label>
+      <select id="topic"></select>
+      <div class="small">Select the main syllabus unit before narrowing the prompt.</div>
+    </div>
+    <div class="field">
+      <label for="subtopic">SUB-TOPIC / FOCUS AREA</label>
+      <select id="subtopic"></select>
+      <div class="small">The prompt will be targeted specifically to this sub-topic.</div>
+    </div>
+
+    <div class="step"><span class="stepnum">2</span><span class="stepname">Customize the output</span></div>
+    <div class="field">
+      <label for="focus">OPTIONAL MICRO-TOPIC / SPECIFIC ANGLE</label>
+      <input id="focus" placeholder="e.g. Chhattisgarh examples, PYQ trend, schemes, diagrams">
+    </div>
+
+    <div class="field">
+      <label>NOTE MODE</label>
+      <div class="checks">
+        <label class="check"><input type="checkbox" id="prelims" checked> Prelims scoring</label>
+        <label class="check"><input type="checkbox" id="mains" checked> Mains answer value</label>
+        <label class="check"><input type="checkbox" id="current" checked> Current-affairs linkage</label>
+        <label class="check"><input type="checkbox" id="pyq" checked> PYQ analysis</label>
+        <label class="check"><input type="checkbox" id="mcq" checked> Practice MCQs</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="depth">DEPTH</label>
+      <select id="depth">
+        <option>Standard — exam-ready</option>
+        <option>Deep — complete but selective</option>
+        <option>Rapid Revision — ultra concise</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="cutoff">CURRENT-AFFAIRS CUTOFF</label>
+      <input id="cutoff" value="Use the latest available information; state the date/year for time-sensitive facts.">
+    </div>
+
+    <div class="actions">
+      <button class="primary" id="copy">Copy Prompt</button>
+      <div class="small" style="margin-top:10px;text-align:center">Your generated prompt is kept behind the dashboard and copied directly to your clipboard.</div>
+      <button class="secondary" id="refresh">Regenerate</button>
+      <button class="ghost" id="reset">Reset</button>
+    </div>
+
+    <div class="kpi">
+      <div><b id="topicCount">0</b><span>Topics in subject</span></div>
+      <div><b>CG-first</b><span>Priority logic</span></div>
+      <div><b>HTML</b><span>Output format</span></div>
+    </div>
+  </section>
+
+  <section class="card output">
+    <div class="output-head">
+      <h2>Generated Master Prompt</h2>
+      <span class="status" id="status">Ready</span>
+    </div>
+    <div class="prompt-wrap">
+      <div class="info">
+        <strong id="selectionTitle">Select a subject and topic</strong>
+        <span id="selectionMeta">The generated prompt will appear here.</span>
+      </div>
+      <div class="prompt" id="prompt"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Built from the uploaded CGPSC syllabus. The app does not invent syllabus units; it uses the supplied structure and applies subject-specific note-curation rules.
+</footer>
+
+<script>
+const DATA = {
+"Paper 01 — General Studies": {
+  "History of Chhattisgarh & Independence Movement": [
+    "History of Chhattisgarh and role of Chhattisgarh in the Independence Movement"
+  ],
+  "Geography, Environment, Census, Archaeology & Tourism": [
+    "Geography of Chhattisgarh","Environment of Chhattisgarh","Physical directions of Chhattisgarh",
+    "Census of Chhattisgarh","Archaeology of Chhattisgarh","Tourist places of Chhattisgarh"
+  ],
+  "History, Music, Dance, Art & Culture": [
+    "History of Chhattisgarh","Music of Chhattisgarh","Dance of Chhattisgarh","Art of Chhattisgarh",
+    "Riddles of Chhattisgarh","Proverbs and local proverbs of Chhattisgarh"
+  ],
+  "Tribes, Traditions & Festivals": [
+    "Tribes of Chhattisgarh","Special traditions of Chhattisgarh","Festivals of Chhattisgarh"
+  ],
+  "Economy, Forest & Agriculture": [
+    "Economy of Chhattisgarh","Forests of Chhattisgarh","Agriculture of Chhattisgarh"
+  ],
+  "Administration & Panchayati Raj": [
+    "Administrative setup of Chhattisgarh","Local administration in Chhattisgarh","Panchayati Raj in Chhattisgarh"
+  ],
+  "Industries, Energy, Water & Minerals": [
+    "Industries of Chhattisgarh","Energy resources of Chhattisgarh","Water resources of Chhattisgarh","Mineral resources of Chhattisgarh"
+  ],
+  "Current Affairs of Chhattisgarh": [
+    "Current Affairs of Chhattisgarh"
+  ],
+  "General Hindi": [
+    "Comprehension","Understanding","Précis Writing","Synonyms and Antonyms","Homonyms and meanings",
+    "Meaningful words for a phrase","Vocabulary and usage","Compound words and separation",
+    "Sanskrit-origin words","Word correction","Sentence correction","Prefixes and suffixes",
+    "Proverbs: meaning and use","Letter writing","Phases and nomenclature of Hindi literature history",
+    "Writers of Chhattisgarh and their works"
+  ],
+  "General English": [
+    "Comprehension","Précis Writing","Sentence rearrangement","Sentence correction","Synonyms","Antonyms",
+    "Fill in the blanks","Spelling correction","Vocabulary and usage","Idioms and phrases","Tenses",
+    "Prepositions","Active and passive voice","Parts of speech","English to Hindi translation","Letter writing"
+  ],
+  "Chhattisgarhi Language": [
+    "Knowledge of Chhattisgarhi language","History and development of Chhattisgarhi language",
+    "Chhattisgarhi literature and laureates","Chhattisgarhi grammar","Hindi to Chhattisgarhi translation",
+    "Chhattisgarhi to Hindi translation","Administrative Dictionary"
+  ],
+  "Intelligence, Analytical & Logical Ability": [
+    "Communication skills and mutual skills","Logical reasoning and analytical ability",
+    "Decision making","Problem solving","General mental ability",
+    "Basic statistical works — Class X level","Analysis of numbers","Charts","Underlines","Tables"
+  ]
+},
+"Paper 02 — Science, Technology, Environment, Agriculture & Forestry": {
+  "Chemistry": [
+    "Rate of chemical reaction and chemical equilibrium","Acids and bases","pH scale and simple numericals",
+    "Exothermic and endothermic reactions","Water, washing soda, baking soda, bleaching powder and plaster of Paris",
+    "Lime, cement, glass and steel","Metals, minerals and ores","Metallurgy","Copper and iron metallurgy",
+    "Corrosion","Alloys","Hydrogen","Oxygen","Nitrogen","Alcohol and acetic acid",
+    "Artificial polymers","Polythene","PVC","Teflon","Soap and detergents"
+  ],
+  "Physics": [
+    "Conventional and new sources of energy","Solar energy and solar heating devices","Solar cooker",
+    "Solar cell","Wind energy","Biogas","Fossil fuels","Ideal fuel","Nuclear energy","Fission and fusion",
+    "Chain reaction and nuclear reactor","CREDA","Nature and reflection of light","Plane and curved mirrors",
+    "Convex and concave mirrors","Focal length and radius of curvature","u-v-f relation and numericals",
+    "Refraction","Critical angle and total internal reflection","Lenses","Human eye and defects",
+    "Photographic camera and human eye","Simple and astronomical telescope","Electricity","Ohm's law",
+    "Resistance and specific resistance","Combination of resistances","Power and electrical energy numericals",
+    "Chemical effects of electric current","Primary and secondary cells","Leclanche cell","Dry cell",
+    "Lead accumulator","Magnetic effect of current","Oersted experiment","Electromagnetic induction",
+    "Electric motor","Generator","AC and DC","Electric discharge in gases","Cathode rays","X-rays",
+    "Magnetism","Magnetic lines of force","Terrestrial magnetism","Magnetic storm","Magnetic meridian"
+  ],
+  "Biology": [
+    "Types of nutrition","Digestion in Amoeba","Digestion in grasshopper","Human digestive system",
+    "Photosynthesis","Photosynthesis experiments","Respiration","Aerobic and anaerobic respiration",
+    "Human respiratory system","Respiratory quotient","Transport of water and minerals","Blood",
+    "Heart and blood vessels","Blood coagulation","Blood groups and transfusion","Lymph system",
+    "Heart diseases","Excretion in plants and animals","Human excretory system","Dialysis",
+    "Osmoregulation","Kidney diseases","Control and coordination in plants","Phytohormones",
+    "Human nervous system","Brain and spinal cord","Reflex action","Endocrine glands and hormones",
+    "Asexual reproduction","Vegetative reproduction","Sexual reproduction in plants","Pollination and fertilization",
+    "Human reproduction","Heredity and variation","Chromosomes","DNA","Genes","Sex determination",
+    "Organic evolution — Oparin theory"
+  ],
+  "Technology": [
+    "National Science and Technology Policy","Purpose of technology","Indian space programme",
+    "Applications of space technology","INSAT","IRS","IT in rural India","Basics of computers",
+    "Computers in communication and broadcasting","Software development for economic growth",
+    "Applications of IT","Energy demand","Renewable and non-renewable energy","Nuclear energy",
+    "Current science and technology developments in India","Origin and development of agriculture",
+    "Agricultural science","Crop science","Fertilizers","Pest and disease control"
+  ],
+  "Environment": [
+    "Biodiversity and conservation","Species diversity and genetic diversity","Biogeographic classification of India",
+    "Importance of biodiversity","Social and moral dimensions of biodiversity","Global, national and local biodiversity",
+    "Biodiversity hotspots","Threats to biodiversity","Habitat damage","Human-wildlife conflict",
+    "Threatened and endemic species of India","In-situ and ex-situ conservation","Air pollution","Water pollution",
+    "Sea pollution","Soil pollution","Noise pollution","Thermal pollution","Nuclear pollution",
+    "Solid waste management","Urban and industrial solid waste","Human role in pollution control",
+    "Disaster management","Floods","Earthquakes","Cyclones","Landslides","Population and environment",
+    "Population growth","Population explosion","Family welfare programme","Environment and human health"
+  ],
+  "Agriculture": [
+    "Ecology and relevance to humans","Natural resources and sustainable management","Physical and social environment",
+    "Climate and crop distribution","Climate and crop growth","Environmental change and cropping pattern",
+    "Pollution hazards to crops, animals and humans","Cropping patterns in agro-climatic zones",
+    "High-yielding and short-duration varieties","Multiple cropping","Multistorey cropping","Relay cropping","Intercropping",
+    "Production practices of cereals","Production practices of pulses","Oilseeds","Fibre crops","Sugar crops",
+    "Commercial crops","Fodder crops","Kharif crops","Rabi crops","Extension forestry","Social forestry",
+    "Agroforestry","Natural forests","Weeds and weed control","Soil properties","Soil formation","Indian soil classification",
+    "Soil minerals and organic matter","Plant nutrients","Soil fertility","Integrated nutrient management",
+    "Nitrogen losses","Nitrogen-use efficiency in rice soils","Nitrogen fixation","Phosphorus and potassium fixation",
+    "Problem soils and reclamation","Watershed soil conservation","Erosion and runoff management","Dryland agriculture",
+    "Rainfed agriculture","Water-use efficiency","Irrigation scheduling","Drip irrigation","Sprinkler irrigation",
+    "Drainage of waterlogged soils","Irrigation water quality","Industrial effluents and soil/water pollution",
+    "Farm management","Farm planning","Resource optimization","Farm budgeting","Farming systems economics",
+    "Agricultural marketing and pricing","Cooperatives","Types of farming","Agricultural extension",
+    "Socioeconomic survey","Small and marginal farmers","Landless agricultural labourers","Farm mechanization",
+    "Rural employment","Extension worker training","Lab-to-land programmes","Cell theory and cell structure",
+    "Cell division","Nucleic acids","Gene structure and function","Laws of heredity","Chromosomes",
+    "Chromosomal aberrations","Linkage and crossing over","Polyploidy","Euploidy and aneuploidy","Mutation",
+    "Variation and heritability","Sterility and incompatibility","Cytoplasmic inheritance","Sex-linked characters",
+    "Sex-influenced and sex-limited characters","History of plant breeding","Selfing and crossing techniques",
+    "Origin and evolution of crop plants","Centres of origin","Crop genetic resources","Plant breeding methods",
+    "Pure-line selection","Pedigree selection","Mass selection","Recurrent selection","Combining ability",
+    "Hybrid vigour","Backcross method","Breeding for disease and pest resistance","Interspecific and intergeneric hybridization",
+    "Biotechnology in plant breeding","Improved varieties, hybrids and composites","Seed technology",
+    "Seed production and processing","Public and private seed sectors","Plant physiology","Imbibition","Diffusion and osmosis",
+    "Water absorption and translocation","Transpiration","Enzymes and plant pigments","Photosynthesis",
+    "Aerobic and anaerobic respiration","C3, C4 and CAM mechanisms","Carbohydrate, protein and fat metabolism",
+    "Plant growth and development","Photoperiodism","Vernalization","Auxins and plant hormones","Plant growth regulators",
+    "Seed development","Seed germination","Dormancy","Fruit crops","Vegetable crops","Flower crops",
+    "Crop cultivation practices","Fruit and vegetable handling","Preservation and processing","Human nutrition",
+    "Ornamental plants","Lawns and gardens","Plant diseases and pests","Pest and disease classification",
+    "Biological control","Integrated pest and disease management","Epidemiology and forecasting","Pesticides",
+    "Storage pests and diseases","Food production and consumption trends","Food policies","Procurement and distribution",
+    "Food processing","Calorie and protein deficiencies"
+  ],
+  "Forestry": [
+    "General silviculture","Silviculture systems","Mangrove silviculture","Cold desert silviculture",
+    "Silviculture of trees","Agroforestry","Social forestry","Joint Forest Management","Forest soil",
+    "Soil conservation and watershed management","Environment conservation and biodiversity",
+    "Forest pollution","Tree improvement","Forest technology","Forest management","Forest management systems",
+    "Forest working plan","Forest mensuration","Remote sensing","Forest survey","Forest engineering",
+    "Forest ecology","Ethnobotany","Forest resource utilisation","Forest protection","Wildlife biology",
+    "Forest economics","Forest legislation"
+  ]
+}
+};
+
+const SUBJECT_RULES = {
+"History of Chhattisgarh & Independence Movement": "Prioritize chronology, dynasties/polities, archaeological evidence, regional movements, personalities, British-era developments, tribal/peasant participation, and Chhattisgarh's distinct contribution to the freedom struggle. Use timelines and place-person-event mapping.",
+"Geography, Environment, Census, Archaeology & Tourism": "Prioritize location, physiography, rivers, climate, soils, forests, districts, resources, census indicators, archaeological sites and tourist locations. Use map-style tables, district/location associations and comparison grids.",
+"History, Music, Dance, Art & Culture": "Prioritize origin, evolution, distinctive features, regional distribution, communities, important personalities/works, instruments, forms and festivals. Use art-form-feature-region tables and memory hooks.",
+"Tribes, Traditions & Festivals": "Prioritize tribe-wise identity, distribution, language/community markers, customs, festivals, dances, occupations, institutions and distinctive practices. Avoid stereotyping; distinguish tribes carefully.",
+"Economy, Forest & Agriculture": "Prioritize state economy, sectors, agriculture, forest economy, major crops, resources, employment, state schemes, institutions, data and Chhattisgarh-specific examples. Connect static concepts with state economic surveys when current data is used.",
+"Administration & Panchayati Raj": "Prioritize constitutional/legal basis, three-tier structure, state-specific administrative structure, local bodies, powers, functions, finances, institutions and Chhattisgarh-specific implementation.",
+"Industries, Energy, Water & Minerals": "Prioritize resource-location mapping, major industries, mineral belts, energy projects, water resources, production/importance, environmental implications and Chhattisgarh-specific institutions/policies.",
+"Current Affairs of Chhattisgarh": "Strictly filter for Chhattisgarh. Organize by polity/governance, economy, schemes, awards, culture, environment, science, infrastructure, districts and important appointments. Always provide date and source.",
+"General Hindi": "Treat as language skill preparation. Focus on rules, patterns, examples, error traps, vocabulary and practice. For Chhattisgarh writers, prioritize author-work associations and verified literary facts.",
+"General English": "Focus on rule-based scoring, grammar patterns, error identification, vocabulary, comprehension, précis, translation and writing formats. Use examples and common traps rather than long theory.",
+"Chhattisgarhi Language": "Prioritize grammar, vocabulary, linguistic development, literature, laureates, translation and administrative terminology. Use Chhattisgarhi examples where appropriate and distinguish language facts carefully.",
+"Intelligence, Analytical & Logical Ability": "Make the notes practice-oriented. Explain the method, shortcut where valid, common traps, worked examples and increasing-difficulty questions. For statistics, use Class X-level interpretation of charts, tables and numerical data.",
+"Chemistry": "Prioritize definitions, reaction logic, properties, preparation, uses, metallurgy, compounds, periodic trends and simple numericals. Use reaction/compound tables and avoid university-level depth beyond the syllabus.",
+"Physics": "Prioritize laws, concepts, diagrams, applications and numerical patterns explicitly relevant to the syllabus. Show formulas with units, common mistakes and one worked example where numerical questions are possible.",
+"Biology": "Prioritize processes, structures, functions, sequences, diseases, hormones, genetics and diagrams. Use flowcharts and compare closely related biological terms. Stay at the syllabus level.",
+"Technology": "Prioritize Indian applications, rural development, space technology, IT, energy and current science developments. Link static concepts to practical Indian applications and recent developments without drifting into engineering depth.",
+"Environment": "Prioritize biodiversity, conservation, pollution, waste management, disasters, human-environment relations and Indian examples. Add Chhattisgarh examples whenever relevant. Use cause→effect→control frameworks.",
+"Agriculture": "Use an agriculture-exam framework: concept → scientific basis → crop/soil relevance → management → Indian application → Chhattisgarh relevance where supported. Prioritize crop science, soil, irrigation, breeding, physiology, pests/diseases, farm economics and food systems. Use diagrams/tables heavily.",
+"Forestry": "Prioritize silviculture, forest ecology, management, working plans, mensuration, remote sensing, biodiversity, wildlife, ethnobotany, resource use, economics and legislation. Add Chhattisgarh forest context when directly relevant, without inventing state-specific details."
+};
+
+
+function buildSubtopics(subjectName, topicName){
+  const generic = [
+    "Core concepts & definitions",
+    "Important facts & classifications",
+    "CGPSC exam perspective",
+    "Prelims facts & common traps",
+    "Mains dimensions & answer value"
+  ];
+  const special = {
+    "History of Chhattisgarh and role of Chhattisgarh in the Independence Movement":
+      ["Chronology & major events","Important personalities & contributions","Regional movements","Role in the Independence Movement","PYQ-oriented facts"],
+    "Geography of Chhattisgarh":
+      ["Physiography & physical features","Rivers, drainage & water bodies","Climate, soils & natural resources","District/location mapping","Tourism & geographical significance"],
+    "Environment of Chhattisgarh":
+      ["Ecosystems & biodiversity","Forests & wildlife","Environmental challenges","Conservation measures","Chhattisgarh-specific examples"],
+    "Agriculture of Chhattisgarh":
+      ["Major crops & cropping pattern","Agro-climatic context","Irrigation & water management","Agricultural practices & constraints","Government initiatives & current issues"],
+    "Economy of Chhattisgarh":
+      ["State economy overview","Primary, secondary & tertiary sectors","Agriculture, industry & services","Resources, employment & development","State schemes/data/current link"],
+    "Panchayati Raj in Chhattisgarh":
+      ["Constitutional framework","Three-tier structure","Powers & functions","Finance & local governance","Chhattisgarh-specific institutions"],
+    "Current Affairs of Chhattisgarh":
+      ["Polity & governance","Economy & schemes","Environment & resources","Culture, awards & personalities","District-wise developments"],
+    "Biodiversity and conservation":
+      ["Levels of biodiversity","India's biodiversity & hotspots","Threats","In-situ conservation","Ex-situ conservation"],
+    "Environmental pollution":
+      ["Air pollution","Water & marine pollution","Soil pollution","Noise, thermal & nuclear pollution","Waste management & control"],
+    "Disaster Management":
+      ["Floods","Earthquakes","Cyclones","Landslides","Preparedness, mitigation & response"]
+  };
+  return special[topicName] || generic;
+}
+
+function fill(id, arr){
+  const el=document.getElementById(id); el.innerHTML="";
+  arr.forEach(x=>{const o=document.createElement("option");o.value=x;o.textContent=x;el.appendChild(o)});
+}
+const paper=document.getElementById("paper"), subject=document.getElementById("subject"), topic=document.getElementById("topic");
+fill("paper",Object.keys(DATA));
+function updateSubjects(){
+  const p=paper.value; fill("subject",Object.keys(DATA[p])); updateTopics();
+}
+function updateTopics(){
+  const p=paper.value,s=subject.value;
+  fill("topic",DATA[p][s]);
+  updateSubtopics();
+}
+function updateSubtopics(){
+  const subs=buildSubtopics(subject.value,topic.value);
+  fill("subtopic",subs);
+  document.getElementById("topicCount").textContent=DATA[paper.value][subject.value].length;
+  generate();
+}
+paper.addEventListener("change",updateSubjects);
+subject.addEventListener("change",updateTopics);
+topic.addEventListener("change",updateSubtopics);
+document.getElementById("subtopic").addEventListener("change",generate);
+["focus","cutoff","depth","prelims","mains","current","pyq","mcq"].forEach(id=>{
+  document.getElementById(id).addEventListener("input",generate);
+  document.getElementById(id).addEventListener("change",generate);
+});
+
+function generate(){
+ const p=paper.value,s=subject.value,t=topic.value,st=document.getElementById("subtopic").value;
+ const focus=document.getElementById("focus").value.trim()||"No additional angle specified.";
+ const depth=document.getElementById("depth").value;
+ const cutoff=document.getElementById("cutoff").value.trim();
+ const prelims=document.getElementById("prelims").checked;
+ const mains=document.getElementById("mains").checked;
+ const current=document.getElementById("current").checked;
+ const pyq=document.getElementById("pyq").checked;
+ const mcq=document.getElementById("mcq").checked;
+ const rule=SUBJECT_RULES[s]||"Apply strict syllabus alignment, CGPSC relevance, accuracy and revision-first curation.";
+
+ let out=`You are an expert CGPSC mentor, syllabus analyst, researcher and exam-note designer.
+
+MISSION
+Create highly curated, exam-oriented notes STRICTLY for the Chhattisgarh Public Service Commission (CGPSC).
+
+SELECTED SYLLABUS LOCATION
+Paper: ${p}
+Subject: ${s}
+Topic: ${t}
+Sub-topic: ${st}
+Micro-focus: ${focus}
+Depth: ${depth}
+Current-affairs instruction: ${cutoff}
+
+NON-NEGOTIABLE PRIORITY
+1. CGPSC relevance > generic competitive-exam relevance.
+2. Exact syllabus topic > broad textbook coverage.
+3. Chhattisgarh-specific relevance > generic India/world content whenever applicable.
+4. Exam utility > encyclopedic detail.
+5. Accuracy > quantity.
+6. Revision value > verbosity.
+
+SUBJECT-SPECIFIC CURATION RULE
+${rule}
+
+SOURCE DISCIPLINE
+Use the supplied syllabus as the controlling scope. Do not silently expand beyond it.
+Do not invent facts, statistics, schemes, PYQs, dates, question numbers, reports or citations.
+When current data is used, give the reference year/date.
+When exact PYQ verification is unavailable, write "PYQ verification required" instead of fabricating a question.
+Prefer authoritative/official sources for factual and current information.
+
+STEP 1 — SYLLABUS BOUNDARY
+First identify:
+• What exactly falls inside the selected topic
+• What is only supporting context
+• What should be excluded as outside the syllabus
+Then prepare the notes.
+
+STEP 2 — EXAM CURATION
+For every major subtopic classify importance as:
+🔴 VERY HIGH — core/high-probability
+🟠 HIGH — important
+🟡 MODERATE — supporting
+⚪ LOW — only if essential
+
+Do not fill the notes with low-value facts.
+
+`;
+
+ if(prelims) out+=`
+STEP 3 — PRELIMS LAYER
+Create:
+• High-yield facts
+• Definitions/terminology
+• Dates/years/locations where relevant
+• Lists likely to become MCQs
+• Statement-based traps
+• Similar/confusable facts
+• Simple numericals where the syllabus demands them
+Use a compact "PRELIMS FACT BOX".
+`;
+ if(pyq) out+=`
+STEP 4 — PYQ LAYER
+Analyse verified CGPSC PYQs relevant to this topic:
+• repeated themes
+• recurring concepts
+• factual patterns
+• question framing
+• likely future angles
+Label each insight as PYQ SIGNAL.
+Never invent PYQs.
+`;
+ if(mains) out+=`
+STEP 5 — MAINS LAYER
+Extract answer-writing material:
+• definitions
+• causes
+• significance
+• dimensions
+• challenges
+• impacts
+• government measures
+• constitutional/legal dimensions where relevant
+• Chhattisgarh examples
+• data/examples
+• way forward
+Create a compact answer framework rather than a generic essay.
+`;
+ if(current) out+=`
+STEP 6 — CURRENT-AFFAIRS LINK
+Integrate only current developments that materially improve understanding or exam relevance.
+Separate STATIC, CURRENT and STATIC + CURRENT LINK.
+Do not turn the notes into a newspaper digest.
+`;
+ if(mcq) out+=`
+STEP 7 — PRACTICE
+Create 10–15 CGPSC-style MCQs from the notes.
+Prefer statement-based, elimination-oriented and concept-plus-fact questions where suitable.
+For every MCQ give the answer and a concise explanation.
+Do not test facts that were not taught in the notes.
+`;
+
+ out+=`
+
+STEP 7A — INTELLIGENT 3D-STYLE DIAGRAM ENGINE
+The final HTML notes MUST use diagrams whenever a visual representation genuinely improves understanding, memory, comparison, sequence, hierarchy, geography, mechanism or process. Do not force a diagram for purely linguistic or list-based facts.
+
+Create the diagrams using ONLY self-contained HTML + CSS + inline SVG (no external libraries, CDNs, images or JavaScript dependencies). They should have a polished "3D-looking" appearance through layered shapes, gradients, shadows, depth, perspective, connectors and subtle CSS animation. Keep them lightweight, readable and print-safe.
+
+SUBJECT-SPECIFIC DIAGRAM LANGUAGE — never use one generic diagram style for every subject:
+• History / Culture / Chhattisgarh History:
+  Use 3D timeline ribbons, layered event cards, cause→event→impact chains, personality/event relationship maps and animated chronological paths.
+• Geography:
+  Use isometric/3D terrain blocks, river-flow diagrams, basin cross-sections, elevation layers, climate wheels and map-style SVG schematics. Clearly label that a schematic is not a geographic map when it is not to scale.
+• Polity / Administration / Panchayati Raj:
+  Use 3D hierarchy trees, constitutional-layer stacks, institution relationship diagrams and authority→function→accountability flows.
+• Economy:
+  Use 3D sector blocks, circular flow diagrams, resource→production→employment chains, indicator dashboards and Sankey-like flows where appropriate.
+• Chemistry:
+  Use molecular-style node diagrams, reaction pathways, equilibrium balance visuals, layered process diagrams and reaction-energy profiles.
+• Physics:
+  Use force/vector diagrams, ray diagrams, circuit diagrams, field-line visuals, wave/energy-flow diagrams and animated mechanism schematics.
+• Biology:
+  Use 3D organ/process cutaway-style SVGs, cell/chromosome structures, pathway diagrams, life cycles, feedback loops and system flow diagrams.
+• Technology / Space:
+  Use layered system architecture, satellite-orbit schematics, communication pipelines, network diagrams and technology lifecycle visuals.
+• Environment:
+  Use ecosystem webs, trophic pyramids, pollution source→pathway→impact→control chains, conservation decision trees and cycle diagrams.
+• Agriculture:
+  Use 3D crop-cycle diagrams, soil-profile layers, irrigation-flow systems, farm-system loops, seed-to-harvest pipelines and crop comparison matrices.
+• Forestry:
+  Use layered forest structure diagrams, silviculture cycle diagrams, watershed/forest interaction models, management-plan flows and biodiversity webs.
+• Language / Hindi / English / Chhattisgarhi:
+  Prefer animated grammar trees, word-formation ladders, sentence structures, translation bridges and rule→example→trap diagrams. Avoid decorative scientific 3D visuals.
+• Intelligence / Reasoning:
+  Use step-by-step animated logic flows, decision trees, number patterns, matrix/figure schematics and worked-example diagrams.
+
+3D DIAGRAM QUALITY RULES
+1. Each diagram must communicate information, not merely decorate the page.
+2. Prefer 1–4 strong diagrams over many weak ones.
+3. Add a short caption: "Why this visual matters".
+4. Use accessible labels and a plain-text fallback summary below complex SVGs.
+5. Animate only subtle elements such as flow arrows, pulses, orbiting markers or sequential highlights.
+6. Avoid distracting continuous motion during reading.
+7. Never use a diagram where exact numerical/geographical precision would be misleading.
+8. For diagrams involving Chhattisgarh, prioritize district/resource/river/forest/cultural examples from the selected topic when supported.
+9. Keep SVG dimensions responsive and print-friendly.
+10. Do not invent visual facts that are not supported by the notes.
+
+STEP 8 — VISUAL NOTE STRUCTURE
+Return the final notes as clean, self-contained HTML.
+
+Required structure:
+1. Topic title + CGPSC relevance
+2. Syllabus mapping
+3. One-screen overview
+4. Core concepts
+5. Subject-specific deep dive
+6. 🔴 Exam Priority markers
+7. ⚡ Prelims Fact Box
+8. 🧠 Memory Tricks where genuinely useful
+9. ⚠️ Common CGPSC Traps
+10. 🟥 PYQ Signal
+11. ✍️ Mains Value Addition
+12. 🔗 Topic Connections
+13. ⚡ 60-Second Revision
+14. 🎯 Must Remember
+15. Practice section
+16. Sources/References
+
+VISUAL DESIGN
+Use semantic HTML with:
+• cards
+• tables
+• timelines
+• flowcharts
+• comparison grids
+• callout boxes
+• badges
+• concise bullets
+• responsive layout
+• print-friendly styling
+
+Do not use excessive decoration or animation.
+The design must optimize:
+READABILITY → REVISION → RETENTION → EXAM UTILITY.
+
+SUBJECT-SPECIFIC VISUALS
+Use the subject's dedicated diagram language from the 3D-STYLE DIAGRAM ENGINE above.
+Combine diagrams with:
+• comparison tables
+• timelines
+• flowcharts
+• hierarchy maps
+• callout cards
+• memory anchors
+• exam-priority badges
+Never reuse the same diagram template mechanically across all subjects.
+
+FINAL QUALITY GATE
+Before outputting, verify:
+☑ Strictly within selected CGPSC syllabus
+☑ Subject-specific curation applied
+☑ Chhattisgarh relevance prioritized where applicable
+☑ No fabricated PYQs
+☑ No unsupported statistics
+☑ Static/current content separated
+☑ High-yield facts highlighted
+☑ Revision section is genuinely concise
+☑ HTML is clean and usable
+☑ No unnecessary UPSC-style expansion
+
+GOLDEN RULE
+Do NOT write everything you know.
+Write what a serious CGPSC aspirant needs to know to score.
+
+Now generate the complete notes for:
+"${t}"
+`;
+ document.getElementById("prompt").textContent=out;
+ document.getElementById("selectionTitle").textContent=`${s} → ${t}`;
+ document.getElementById("selectionMeta").innerHTML=`${p} • ${depth} • Subject rule applied<br><span class="selection-pill">Sub-topic: ${st}</span>`;
+}
+
+document.getElementById("copy").addEventListener("click",async()=>{
+ try{
+  await navigator.clipboard.writeText(document.getElementById("prompt").textContent);
+  document.getElementById("status").textContent="✓ Prompt copied";
+  setTimeout(()=>document.getElementById("status").textContent="Ready",1800);
+ }catch(e){
+  const ta=document.createElement("textarea");ta.value=document.getElementById("prompt").textContent;
+  document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();
+  document.getElementById("status").textContent="✓ Prompt copied";
+ }
+});
+document.getElementById("refresh").addEventListener("click",generate);
+document.getElementById("reset").addEventListener("click",()=>{
+ document.getElementById("focus").value="";
+ document.getElementById("depth").value="Standard — exam-ready";
+ document.getElementById("cutoff").value="Use the latest available information; state the date/year for time-sensitive facts.";
+ ["prelims","mains","current","pyq","mcq"].forEach(id=>document.getElementById(id).checked=true);
+ generate();
+});
+updateSubjects();
+</script>
+</body>
+</html>
