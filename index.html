@@ -41,7 +41,7 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid #ffffff25;b
   <div class="toolbar">
     <label class="searchbox"><span>⌕</span><input id="search" type="search" placeholder="Find a subject…" aria-label="Search subjects"></label>
     <div class="tool-actions">
-      <button class="small-btn" id="authBtn">☁ Sign in</button>
+      <button class="small-btn" id="syncBtn">☁ Sync now</button>
       <button class="small-btn" id="editAll">✎ Manage prompts</button>
       <button class="small-btn" id="exportBtn">↗ Export backup</button>
       <button class="small-btn" id="importBtn">↙ Import backup</button>
@@ -56,18 +56,9 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid #ffffff25;b
 <dialog id="editor">
   <div class="modal-head"><h2 id="modalTitle">Edit subject prompt</h2><button class="close" id="closeModal" aria-label="Close">×</button></div>
   <div class="modal-body">
-    <p id="modalHelp">Paste the prompt you want this subject's button to copy. It is saved to your Supabase account (or this browser if Supabase isn't configured yet).</p>
+    <p id="modalHelp">Paste the prompt you want this subject's button to copy. It is saved to your Supabase database and cached in this browser.</p>
     <textarea id="promptText" placeholder="Paste or write your full prompt here…"></textarea>
     <div class="modal-actions"><button class="small-btn danger" id="clearPrompt">Clear prompt</button><div style="display:flex;gap:9px"><button class="small-btn" id="cancelEdit">Cancel</button><button class="primary" id="savePrompt">Save prompt ✓</button></div></div>
-  </div>
-</dialog>
-<dialog id="authDlg">
-  <div class="modal-head"><h2>☁ Supabase account</h2><button class="close" id="closeAuth" aria-label="Close">×</button></div>
-  <div class="modal-body">
-    <p id="authHelp">Sign in to load and save your prompts. New here? Enter an email and password and press “Create account”.</p>
-    <input class="auth-input" id="authEmail" type="email" placeholder="Email" autocomplete="email">
-    <input class="auth-input" id="authPass" type="password" placeholder="Password (min 6 characters)" autocomplete="current-password">
-    <div class="modal-actions"><button class="small-btn" id="signUpBtn">Create account</button><button class="primary" id="signInBtn">Sign in ✓</button></div>
   </div>
 </dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
@@ -88,63 +79,81 @@ const SUBJECTS = [
  {name:"Forestry",icon:"🌲",group:"Applied GS",accent:"#78dfb2"}
 ];
 
-/* ================= SUPABASE SETTINGS =================
-   1) Supabase dashboard → Project Settings → API
-   2) Paste the Project URL and the "anon / public" key below.
-   Until you do, prompts are kept in this browser only.            */
-const SUPABASE_URL = "https://jxozwhyroherxojhkslg.supabase.co";      // e.g. https://abcdxyz.supabase.co
+/* ================= SUPABASE SETTINGS ================= */
+const SUPABASE_URL = "https://jxozwhyroherxojhkslg.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_zQcr8lTMQnzwyEw5DN4j-w_kdoJfYQj";
-const TABLE = "subject_prompts";
+const TABLE = "promptdeck_prompts";
 /* ===================================================== */
 
 const LOCAL_KEY = "promptDeck.subjectPrompts.v2";
-try { localStorage.removeItem("promptDeck.subjectPrompts.v1"); } catch(e) {}   // drop old built-in prompts cached in this browser
+try { localStorage.removeItem("promptDeck.subjectPrompts.v1"); } catch(e) {}
+let sb = null;
+try { if (window.supabase) sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch(e) { sb = null; }
 
-const cloudConfigured = /^https:\/\//.test(SUPABASE_URL) && !/^PASTE_/.test(SUPABASE_ANON_KEY);
-let sb = null, session = null;
-if (cloudConfigured && window.supabase) { try { sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch(e) { sb = null; } }
-const cloudMode = !!sb;
-
-let prompts = {};
-let activeSubject = null;
 const $ = id => document.getElementById(id);
+const NAMES = new Set(SUBJECTS.map(s => s.name));
+let prompts = {}, activeSubject = null, cloudOK = false, lastSync = null;
+try { prompts = JSON.parse(localStorage.getItem(LOCAL_KEY) || "{}") || {}; } catch(e) { prompts = {}; }
+
 function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 let toastTimer;
-function toast(message){$("toast").textContent=message;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),2800);}
-
-if (!cloudMode) { try { prompts = JSON.parse(localStorage.getItem(LOCAL_KEY) || "{}") || {}; } catch(e) { prompts = {}; } }
-
-function setStatus(){
-  let html;
-  if (!cloudConfigured) html = 'Storage: <b>this browser only</b> — add Supabase keys to sync';
-  else if (!cloudMode) html = 'Storage: <b>Supabase library failed to load</b> — check your internet connection';
-  else if (session) html = 'Storage: <b>Supabase</b> · ' + escapeHTML(session.user.email || 'signed in');
-  else html = 'Storage: <b>Supabase</b> · not signed in';
-  $("syncStatus").innerHTML = html;
-  $("authBtn").textContent = !cloudMode ? '☁ Supabase not set up' : session ? '⏻ Sign out' : '☁ Sign in';
+function toast(m){$("toast").textContent=m;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),3200);}
+function cacheLocal(){ try { localStorage.setItem(LOCAL_KEY, JSON.stringify(prompts)); } catch(e) {} }
+function setStatus(txt){ $("syncStatus").innerHTML = 'Storage: <b>' + txt + '</b>'; }
+function statusNow(){
+  if(!sb) return setStatus('browser only — Supabase library failed to load');
+  if(!cloudOK) return setStatus('browser only — cloud not reachable (run the SQL setup?)');
+  setStatus('Supabase ☁ synced' + (lastSync ? ' · ' + lastSync.toLocaleTimeString() : ''));
 }
 
-async function loadCloud(){
-  if(!sb||!session){ prompts = {}; render(); return; }
+/* ---------- cloud helpers ---------- */
+async function pushRows(subjects){
+  const rows = subjects.filter(s => (prompts[s]||"").trim()).map(s => ({subject:s, prompt:prompts[s], updated_at:new Date().toISOString()}));
+  if(!rows.length) return 0;
+  const { error } = await sb.from(TABLE).upsert(rows, { onConflict: "subject" });
+  if(error) throw error;
+  return rows.length;
+}
+async function pullAll(){
   const { data, error } = await sb.from(TABLE).select("subject,prompt");
-  if (error) { toast("Could not load prompts: " + error.message); return; }
-  prompts = Object.fromEntries((data||[]).map(r => [r.subject, r.prompt]));
-  render();
+  if(error) throw error;
+  return Object.fromEntries((data||[]).filter(r => NAMES.has(r.subject)).map(r => [r.subject, r.prompt]));
+}
+// Pull cloud → merge; any prompt that exists only in this browser is uploaded to the cloud.
+async function syncAll(silent){
+  if(!sb) { if(!silent) toast("Supabase library didn't load — check your connection."); return; }
+  try{
+    const cloud = await pullAll();
+    const local = { ...prompts };
+    const localOnly = Object.keys(local).filter(s => NAMES.has(s) && (local[s]||"").trim() && !(s in cloud));
+    prompts = { ...cloud };
+    for(const s of localOnly) prompts[s] = local[s];
+    cacheLocal();
+    let pushed = 0;
+    if(localOnly.length) pushed = await pushRows(localOnly);
+    cloudOK = true; lastSync = new Date(); statusNow(); render();
+    if(!silent) toast(`☁ Synced · ${Object.keys(cloud).length} from cloud${pushed ? `, ${pushed} uploaded` : ""}`);
+  }catch(err){
+    cloudOK = false; statusNow();
+    toast("Sync failed: " + (err.message || err));
+  }
 }
 async function savePromptValue(subject, text){
-  if (!cloudMode) { prompts[subject] = text; try { localStorage.setItem(LOCAL_KEY, JSON.stringify(prompts)); } catch(e) { toast("Browser storage unavailable — export a backup to keep changes."); } return true; }
-  const { error } = await sb.from(TABLE).upsert({ user_id: session.user.id, subject, prompt: text, updated_at: new Date().toISOString() }, { onConflict: "user_id,subject" });
-  if (error) { toast("Save failed: " + error.message); return false; }
-  prompts[subject] = text; return true;
+  const prev = prompts[subject];
+  prompts[subject] = text; cacheLocal();
+  if(!sb) return true;
+  try{ await pushRows([subject]); cloudOK = true; lastSync = new Date(); statusNow(); return true; }
+  catch(err){ cloudOK = false; statusNow(); toast("Saved in this browser, but cloud save failed: " + (err.message||err)); return true; }
 }
 async function deletePromptValue(subject){
-  if (!cloudMode) { delete prompts[subject]; try { localStorage.setItem(LOCAL_KEY, JSON.stringify(prompts)); } catch(e) {} return true; }
-  const { error } = await sb.from(TABLE).delete().eq("subject", subject);
-  if (error) { toast("Delete failed: " + error.message); return false; }
-  delete prompts[subject]; return true;
+  delete prompts[subject]; cacheLocal();
+  if(!sb) return true;
+  try{ const { error } = await sb.from(TABLE).delete().eq("subject", subject); if(error) throw error; cloudOK = true; lastSync = new Date(); statusNow(); }
+  catch(err){ cloudOK = false; statusNow(); toast("Removed locally, but cloud delete failed: " + (err.message||err)); }
+  return true;
 }
-function needSignIn(){ if (cloudMode && !session) { $("authDlg").showModal(); toast("Sign in to add or edit prompts."); return true; } return false; }
 
+/* ---------- UI ---------- */
 function render(){
   const q=$("search").value.trim().toLowerCase();
   const items=SUBJECTS.filter(s=>s.name.toLowerCase().includes(q)||s.group.toLowerCase().includes(q));
@@ -160,18 +169,15 @@ function render(){
     </article>`;
   }).join("") : `<div class="empty">No subjects match “${escapeHTML(q)}”. Try another search.</div>`;
 }
-function openEditor(name){
-  if (needSignIn()) return;
-  activeSubject=name;$("modalTitle").textContent=`${SUBJECTS.find(s=>s.name===name)?.icon||"✦"}  ${name}`;$("promptText").value=prompts[name]||"";$("editor").showModal();setTimeout(()=>$("promptText").focus(),80);
-}
+function openEditor(name){activeSubject=name;$("modalTitle").textContent=`${SUBJECTS.find(s=>s.name===name)?.icon||"✦"}  ${name}`;$("promptText").value=prompts[name]||"";$("editor").showModal();setTimeout(()=>$("promptText").focus(),80);}
 async function copyPrompt(name){
   const text=prompts[name]||"";
   if(!text.trim()){openEditor(name);return;}
   try{await navigator.clipboard.writeText(text);toast(`✓ ${name} prompt copied to clipboard`);}
-  catch(e){$("promptText").value=text;activeSubject=name;$("editor").showModal();$("promptText").focus();$("promptText").select();toast("Clipboard permission unavailable — prompt opened for manual copying.");}
+  catch(e){activeSubject=name;$("promptText").value=text;$("editor").showModal();$("promptText").focus();$("promptText").select();toast("Clipboard permission unavailable — prompt opened for manual copying.");}
 }
 $("grid").addEventListener("click",e=>{
-  const copy=e.target.closest("[data-copy]"); const edit=e.target.closest("[data-edit]");
+  const copy=e.target.closest("[data-copy]"), edit=e.target.closest("[data-edit]");
   if(copy)copyPrompt(copy.dataset.copy);
   if(edit)openEditor(edit.dataset.edit);
 });
@@ -186,58 +192,36 @@ $("closeModal").onclick=()=>$("editor").close();
 $("cancelEdit").onclick=()=>$("editor").close();
 $("savePrompt").onclick=async()=>{
   const name=activeSubject, text=$("promptText").value.trim();
-  const ok = text ? await savePromptValue(name,text) : await deletePromptValue(name);
-  if(ok){$("editor").close();render();toast(text?`Saved prompt for ${name}`:"Prompt cleared");}
+  if(text) await savePromptValue(name,text); else await deletePromptValue(name);
+  $("editor").close(); render(); toast(text?`Saved prompt for ${name}`:"Prompt cleared");
 };
-$("clearPrompt").onclick=async()=>{if(!activeSubject)return;if(await deletePromptValue(activeSubject)){$("promptText").value="";render();toast("Prompt cleared");}};
+$("clearPrompt").onclick=async()=>{if(!activeSubject)return;await deletePromptValue(activeSubject);$("promptText").value="";render();toast("Prompt cleared");};
+$("syncBtn").onclick=()=>syncAll(false);
 
 /* ---------- Export / import ---------- */
 $("exportBtn").onclick=()=>{
- const data={app:"PromptDeck",version:2,exportedAt:new Date().toISOString(),prompts};
+ const data={app:"PromptDeck",version:3,exportedAt:new Date().toISOString(),prompts};
  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="promptdeck-backup.json";a.click();URL.revokeObjectURL(url);toast("Backup exported");
 };
-$("importBtn").onclick=()=>{ if(needSignIn())return; $("importFile").click(); };
+$("importBtn").onclick=()=>$("importFile").click();
 $("importFile").addEventListener("change",async e=>{
  const file=e.target.files[0];if(!file)return;
  try{
   const data=JSON.parse(await file.text());
   const incoming=data && typeof data==="object" && !Array.isArray(data) ? (data.prompts || data) : null;
-  if(!incoming || typeof incoming!=="object" || Array.isArray(incoming)) throw new Error();
-  const names=new Set(SUBJECTS.map(s=>s.name));
-  const valid=Object.entries(incoming).filter(([k,v])=>names.has(k) && typeof v==="string" && v.trim());
-  if(!valid.length) throw new Error();
-  let n=0; for(const [k,v] of valid){ if(await savePromptValue(k,v.trim())) n++; }
-  render();toast(`Backup imported · ${n} prompt(s) saved`);
- }catch(err){toast("That file doesn't look like a PromptDeck JSON backup.");}
+  if(!incoming || typeof incoming!=="object" || Array.isArray(incoming)) throw new Error("bad");
+  const valid=Object.entries(incoming).filter(([k,v])=>NAMES.has(k) && typeof v==="string" && v.trim());
+  if(!valid.length) throw new Error("bad");
+  for(const [k,v] of valid) prompts[k]=v.trim();
+  cacheLocal();
+  if(sb){ try{ await pushRows(valid.map(([k])=>k)); cloudOK=true; lastSync=new Date(); statusNow(); }catch(err){ cloudOK=false; statusNow(); toast("Imported locally; cloud upload failed: "+(err.message||err)); e.target.value=""; render(); return; } }
+  render(); toast(`Backup imported · ${valid.length} prompt(s) saved to cloud`);
+ }catch(err){ toast("That file doesn't look like a PromptDeck JSON backup."); }
  e.target.value="";
 });
 
-/* ---------- Supabase auth ---------- */
-$("authBtn").onclick=async()=>{
-  if(!cloudMode){ toast(cloudConfigured?"Supabase library didn't load — check your connection.":"Paste your Supabase URL and anon key at the top of the script first."); return; }
-  if(session){ await sb.auth.signOut(); toast("Signed out"); return; }
-  $("authDlg").showModal();
-};
-$("closeAuth").onclick=()=>$("authDlg").close();
-async function doAuth(kind){
-  const email=$("authEmail").value.trim(), password=$("authPass").value;
-  if(!email||password.length<6){ toast("Enter an email and a password of at least 6 characters."); return; }
-  const { data, error } = kind==="up" ? await sb.auth.signUp({email,password}) : await sb.auth.signInWithPassword({email,password});
-  if(error){ toast(error.message); return; }
-  if(kind==="up" && !data.session){ toast("Account created — confirm the email Supabase sent you, then sign in."); return; }
-  $("authDlg").close(); $("authPass").value=""; toast("Signed in");
-}
-$("signInBtn").onclick=()=>doAuth("in");
-$("signUpBtn").onclick=()=>doAuth("up");
-
-async function init(){
-  render(); setStatus();
-  if(!cloudMode) return;
-  const { data } = await sb.auth.getSession(); session = data.session; setStatus(); await loadCloud();
-  sb.auth.onAuthStateChange(async (_evt, s)=>{ session = s; setStatus(); await loadCloud(); });
-}
-init();
+render(); statusNow(); syncAll(true);
 </script>
 </body>
 </html>
