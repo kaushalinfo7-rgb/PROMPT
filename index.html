@@ -31,12 +31,12 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
 <main class="wrap">
   <header class="topbar">
     <div class="brand"><div class="brand-icon">🌲</div><span>PROMPT<span style="color:var(--cyan)">DECK</span></span></div>
-    <div class="top-pill">🌿 Forestry Exam · Prompt Launcher</div>
+    <div class="top-pill">🌿 Forestry Exam · Cloud Synced</div>
   </header>
   <section class="hero">
-    <div class="eyebrow"><i></i> Forestry prep workflow · one-click access</div>
+    <div class="eyebrow"><i></i> Forestry prep workflow · cross-device sync</div>
     <h1>Your subjects.<br><span class="gradient-text">Your prompts.</span></h1>
-    <p>A fast, dynamic woodland home for your Forestry study prompts. Add each subject's prompt once, then copy it instantly whenever you need it.</p>
+    <p>A fast, dynamic woodland home for your Forestry study prompts. Add or edit subjects and prompts on any device—everything syncs automatically.</p>
   </section>
   <div class="toolbar">
     <label class="searchbox"><span>⌕</span><input id="search" type="search" placeholder="Find a subject…" aria-label="Search subjects"></label>
@@ -51,7 +51,7 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
   </div>
   <div class="section-head"><h2>🌿 Your subject library</h2><span id="counter">0 subjects</span></div>
   <section class="grid" id="grid" aria-live="polite"></section>
-  <footer class="footer"><span>Cultivated for focus. Designed for Forestry success. 🌲</span><span class="sync-pill" id="syncStatus">Storage: <b>checking…</b></span></footer>
+  <footer class="footer"><span>Cultivated for focus. Synced across all your devices. 🌲</span><span class="sync-pill" id="syncStatus">Storage: <b>checking…</b></span></footer>
 </main>
 <div class="toast" id="toast" role="status"></div>
 
@@ -59,7 +59,7 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
 <dialog id="editor">
   <div class="modal-head"><h2 id="modalTitle">Edit subject prompt</h2><button class="close" id="closeModal" aria-label="Close">×</button></div>
   <div class="modal-body">
-    <p id="modalHelp">Paste the prompt you want this subject's button to copy. It is saved to your Supabase database and cached in this browser.</p>
+    <p id="modalHelp">Paste the prompt you want this subject's button to copy. It is saved to your Supabase cloud database and synced across your devices.</p>
     <textarea id="promptText" placeholder="Paste or write your full prompt here…"></textarea>
     <div class="modal-actions"><button class="small-btn danger" id="clearPrompt">Clear prompt</button><div style="display:flex;gap:9px"><button class="small-btn" id="cancelEdit">Cancel</button><button class="primary" id="savePrompt">Save prompt ✓</button></div></div>
   </div>
@@ -69,7 +69,7 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
 <dialog id="subjectModal">
   <div class="modal-head"><h2 id="subjectModalTitle">Create New Subject</h2><button class="close" id="closeSubjectModal" aria-label="Close">×</button></div>
   <div class="modal-body">
-    <p id="subjectModalDesc" style="margin-bottom: 20px;">Add a new subject or category to your library.</p>
+    <p id="subjectModalDesc" style="margin-bottom: 20px;">Add a new subject or category to your library. It will sync to all your devices.</p>
     <input type="text" id="subNameInput" class="auth-input" placeholder="Subject Name (e.g. Silviculture)" autocomplete="off">
     <input type="text" id="subIconInput" class="auth-input" placeholder="Icon Emoji (e.g. 🌲)" autocomplete="off">
     <input type="text" id="subGroupInput" class="auth-input" placeholder="Group (e.g. Core Forestry)" autocomplete="off">
@@ -98,7 +98,6 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
     c.width = w * dpr; c.height = h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // 3 Parallax layers of pine / forest trees along the horizon
     trees = [];
     const layers = [
       { count: Math.ceil(w / 55), depth: 0.25, minH: 130, maxH: 230, color: "rgba(8, 30, 18, 0.55)" },
@@ -119,7 +118,6 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
       }
     });
 
-    // Bioluminescent fireflies
     const fCount = Math.round(Math.min(75, Math.max(28, (w * h) / 20000)));
     fireflies = Array.from({ length: fCount }, () => ({
       x: Math.random() * w,
@@ -132,7 +130,6 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
       hue: Math.random() > 0.35 ? "145, 255, 175" : "255, 232, 115"
     }));
 
-    // Floating botanical leaves
     const lCount = Math.round(Math.min(32, Math.max(14, w / 55)));
     leaves = Array.from({ length: lCount }, () => ({
       x: Math.random() * w,
@@ -219,7 +216,6 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
     ctx.clearRect(0, 0, w, h);
     if (!still) time += 0.016;
 
-    // Smooth mouse parallax interpolation
     mouse.px += (mouse.tx - mouse.px) * 0.06;
     mouse.py += (mouse.ty - mouse.py) * 0.06;
     mouse.vx *= 0.9;
@@ -227,7 +223,6 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
 
     drawSunbeams();
 
-    // Cursor spotlight aura in the forest mist
     if (mouse.active) {
       const aura = ctx.createRadialGradient(mouse.x, mouse.y, 8, mouse.x, mouse.y, 220);
       aura.addColorStop(0, "rgba(101, 240, 179, 0.11)");
@@ -239,7 +234,6 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
       ctx.fill();
     }
 
-    // Update & draw leaves affected by cursor breeze
     for (const lf of leaves) {
       if (!still) {
         if (mouse.active) {
@@ -265,7 +259,6 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
       drawLeaf(lf);
     }
 
-    // Update & draw fireflies + ecological web around cursor
     for (let i = 0; i < fireflies.length; i++) {
       const f = fireflies[i];
       if (!still) {
@@ -274,7 +267,6 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
           const dx = mouse.x - f.x, dy = mouse.y - f.y;
           const d = Math.hypot(dx, dy);
           if (d < 220 && d > 28) {
-            // Gently orbit & gravitate toward the cursor
             f.vx += (dx / d) * 0.022 - (dy / d) * 0.012;
             f.vy += (dy / d) * 0.022 + (dx / d) * 0.012;
           } else if (d <= 28 && d > 1) {
@@ -289,7 +281,6 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
         if (f.y < 0) f.y = h; if (f.y > h) f.y = 0;
       }
 
-      // Connect nearby fireflies to cursor like a canopy ecosystem web
       if (mouse.active) {
         const md = Math.hypot(f.x - mouse.x, f.y - mouse.y);
         if (md < 155) {
@@ -317,7 +308,6 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
       ctx.fill();
     }
 
-    // Draw cursor spore trail particles
     for (let i = spores.length - 1; i >= 0; i--) {
       const sp = spores[i];
       sp.x += sp.vx;
@@ -330,7 +320,6 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
       ctx.fill();
     }
 
-    // Draw parallax forest horizon layers
     const windShift = mouse.vx * 0.35;
     for (const t of trees) drawPine(t, windShift);
 
@@ -347,7 +336,6 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
     mouse.ty = e.clientY / Math.max(1, h);
     mouse.active = true;
 
-    // Spawn glowing botanical spores on mouse movement
     if (!still && Math.hypot(mouse.vx, mouse.vy) > 3 && spores.length < 65) {
       spores.push({
         x: mouse.x + (Math.random() - 0.5) * 14,
@@ -375,102 +363,240 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line)
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-const DEFAULT_SUBJECTS = [];
-
-const SUBJECTS_KEY = "promptDeck.subjects.v3";
-const LOCAL_KEY = "promptDeck.subjectPrompts.v3";
-
-// Clear legacy storage keys so old preloaded subjects don't come back
-try {
-  localStorage.removeItem("promptDeck.subjects.v2");
-  localStorage.removeItem("promptDeck.customSubjects");
-  localStorage.removeItem("promptDeck.subjectPrompts.v1");
-  localStorage.removeItem("promptDeck.subjectPrompts.v2");
-} catch(e) {}
-
-let SUBJECTS = [];
-try {
-  const saved = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || "null");
-  SUBJECTS = Array.isArray(saved) ? saved : [...DEFAULT_SUBJECTS];
-} catch(e) {
-  SUBJECTS = [...DEFAULT_SUBJECTS];
-}
-
-let NAMES = new Set(SUBJECTS.map(s => s.name));
-function saveSubjects() {
-  NAMES = new Set(SUBJECTS.map(s => s.name));
-  try { localStorage.setItem(SUBJECTS_KEY, JSON.stringify(SUBJECTS)); } catch(e) {}
-}
-saveSubjects();
-
-/* ================= SUPABASE SETTINGS ================= */
+/* ================= SUPABASE & CROSS-DEVICE SYNC SETUP ================= */
 const SUPABASE_URL = "https://jxozwhyroherxojhkslg.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_zQcr8lTMQnzwyEw5DN4j-w_kdoJfYQj";
 const TABLE = "promptdeck_prompts";
-/* ===================================================== */
+const META_ROW_KEY = "__promptdeck_meta__"; // Stores full subject list metadata in cloud
+/* ====================================================================== */
+
+const SUBJECTS_KEY = "promptDeck.subjects.v4";
+const META_TIME_KEY = "promptDeck.metaUpdatedAt.v4";
+const LOCAL_KEY = "promptDeck.subjectPrompts.v4";
+const DIRTY_KEY = "promptDeck.dirtyPrompts.v4";
+
+// Clean up legacy local keys
+try {
+  ["promptDeck.subjects.v2","promptDeck.subjects.v3","promptDeck.customSubjects",
+   "promptDeck.subjectPrompts.v1","promptDeck.subjectPrompts.v2","promptDeck.subjectPrompts.v3"].forEach(k => localStorage.removeItem(k));
+} catch(e) {}
+
+let SUBJECTS = [];
+let metaUpdatedAt = 0;
+let prompts = {};
+let dirtyPrompts = new Set();
+
+try {
+  const savedSubs = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || "null");
+  if (Array.isArray(savedSubs)) SUBJECTS = savedSubs;
+  metaUpdatedAt = Number(localStorage.getItem(META_TIME_KEY) || 0) || 0;
+  prompts = JSON.parse(localStorage.getItem(LOCAL_KEY) || "{}") || {};
+  const savedDirty = JSON.parse(localStorage.getItem(DIRTY_KEY) || "[]");
+  if (Array.isArray(savedDirty)) dirtyPrompts = new Set(savedDirty);
+} catch(e) {}
+
+let NAMES = new Set(SUBJECTS.map(s => s.name));
+
+function saveLocalState() {
+  NAMES = new Set(SUBJECTS.map(s => s.name));
+  try {
+    localStorage.setItem(SUBJECTS_KEY, JSON.stringify(SUBJECTS));
+    localStorage.setItem(META_TIME_KEY, String(metaUpdatedAt));
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(prompts));
+    localStorage.setItem(DIRTY_KEY, JSON.stringify([...dirtyPrompts]));
+  } catch(e) {}
+}
+saveLocalState();
 
 let sb = null;
 try { if (window.supabase) sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch(e) { sb = null; }
 
 const $ = id => document.getElementById(id);
-let prompts = {}, activeSubject = null, editingSubjectTarget = null, cloudOK = false, lastSync = null;
-try { prompts = JSON.parse(localStorage.getItem(LOCAL_KEY) || "{}") || {}; } catch(e) { prompts = {}; }
+let activeSubject = null, editingSubjectTarget = null, cloudOK = false, lastSync = null, isSyncing = false;
 
 function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 let toastTimer;
 function toast(m){$("toast").textContent=m;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),3200);}
-function cacheLocal(){ try { localStorage.setItem(LOCAL_KEY, JSON.stringify(prompts)); } catch(e) {} }
 function setStatus(txt){ $("syncStatus").innerHTML = 'Storage: <b>' + txt + '</b>'; }
 function statusNow(){
   if(!sb) return setStatus('browser only — Supabase library failed to load');
-  if(!cloudOK) return setStatus('browser only — cloud not reachable (run the SQL setup?)');
-  setStatus('Supabase ☁ synced' + (lastSync ? ' · ' + lastSync.toLocaleTimeString() : ''));
+  if(!cloudOK) return setStatus('offline cache — cloud not reachable');
+  setStatus('Supabase ☁ synced across devices' + (lastSync ? ' · ' + lastSync.toLocaleTimeString() : ''));
 }
 
-/* ---------- cloud helpers ---------- */
+/* ---------- Cloud Sync Helpers ---------- */
+async function pushMeta() {
+  if(!sb) return false;
+  const payload = JSON.stringify({ subjects: SUBJECTS, updatedAt: metaUpdatedAt });
+  const { error } = await sb.from(TABLE).upsert(
+    [{ subject: META_ROW_KEY, prompt: payload, updated_at: new Date().toISOString() }],
+    { onConflict: "subject" }
+  );
+  if(error) throw error;
+  return true;
+}
+
 async function pushRows(subjects){
-  const rows = subjects.filter(s => (prompts[s]||"").trim()).map(s => ({subject:s, prompt:prompts[s], updated_at:new Date().toISOString()}));
-  if(!rows.length) return 0;
+  const validSubs = subjects.filter(s => s !== META_ROW_KEY && (prompts[s]||"").trim());
+  if(!validSubs.length) return 0;
+  const rows = validSubs.map(s => ({
+    subject: s,
+    prompt: prompts[s],
+    updated_at: new Date().toISOString()
+  }));
   const { error } = await sb.from(TABLE).upsert(rows, { onConflict: "subject" });
   if(error) throw error;
   return rows.length;
 }
-async function pullAll(){
-  const { data, error } = await sb.from(TABLE).select("subject,prompt");
+
+async function pullCloudData(){
+  const { data, error } = await sb.from(TABLE).select("subject,prompt,updated_at");
   if(error) throw error;
-  return Object.fromEntries((data||[]).filter(r => NAMES.has(r.subject)).map(r => [r.subject, r.prompt]));
+
+  let cloudMeta = null;
+  const cloudPrompts = {};
+
+  for (const row of (data || [])) {
+    if (row.subject === META_ROW_KEY) {
+      try {
+        const parsed = JSON.parse(row.prompt);
+        if (parsed && Array.isArray(parsed.subjects)) {
+          cloudMeta = {
+            subjects: parsed.subjects,
+            updatedAt: Number(parsed.updatedAt) || new Date(row.updated_at || Date.now()).getTime()
+          };
+        }
+      } catch(e) {}
+    } else if (row.subject && typeof row.prompt === "string") {
+      cloudPrompts[row.subject] = row.prompt;
+    }
+  }
+  return { cloudMeta, cloudPrompts };
 }
 
-async function syncAll(silent){
-  if(!sb) { if(!silent) toast("Supabase library didn't load — check your connection."); return; }
-  try{
-    const cloud = await pullAll();
-    const local = { ...prompts };
-    const localOnly = Object.keys(local).filter(s => NAMES.has(s) && (local[s]||"").trim() && !(s in cloud));
-    prompts = { ...cloud };
-    for(const s of localOnly) prompts[s] = local[s];
-    cacheLocal();
-    let pushed = 0;
-    if(localOnly.length) pushed = await pushRows(localOnly);
-    cloudOK = true; lastSync = new Date(); statusNow(); render();
-    if(!silent) toast(`☁ Synced · ${Object.keys(cloud).length} from cloud${pushed ? `, ${pushed} uploaded` : ""}`);
-  }catch(err){
-    cloudOK = false; statusNow();
-    toast("Sync failed: " + (err.message || err));
+async function syncAll(silent = false){
+  if(!sb) { if(!silent) toast("Supabase library didn't load — check your internet connection."); return; }
+  if(isSyncing) return;
+  isSyncing = true;
+
+  try {
+    // 1. Push any offline pending prompt edits first
+    if (dirtyPrompts.size > 0) {
+      const toPush = [...dirtyPrompts].filter(s => (prompts[s]||"").trim());
+      const toDelete = [...dirtyPrompts].filter(s => !(prompts[s]||"").trim());
+      if (toPush.length) await pushRows(toPush);
+      for (const delSub of toDelete) {
+        await sb.from(TABLE).delete().eq("subject", delSub);
+      }
+      dirtyPrompts.clear();
+    }
+
+    // 2. Pull latest subjects metadata + prompts from Supabase
+    const { cloudMeta, cloudPrompts } = await pullCloudData();
+
+    // 3. Reconcile Subject Library list across devices
+    if (cloudMeta) {
+      if (cloudMeta.updatedAt > metaUpdatedAt) {
+        SUBJECTS = cloudMeta.subjects;
+        metaUpdatedAt = cloudMeta.updatedAt;
+      } else if (metaUpdatedAt > cloudMeta.updatedAt) {
+        await pushMeta();
+      }
+    } else {
+      // No metadata row in cloud yet: merge any existing cloud prompt subjects with local subjects
+      const colors = ["#65f0b3","#a7ef76","#ffe66d","#ffb86b","#78dfb2","#c4f26b","#5df6ff","#ff9b70"];
+      let changed = false;
+      for (const subName of Object.keys(cloudPrompts)) {
+        if (!NAMES.has(subName)) {
+          SUBJECTS.push({
+            name: subName,
+            icon: "🌲",
+            group: "Forestry",
+            accent: colors[SUBJECTS.length % colors.length]
+          });
+          NAMES.add(subName);
+          changed = true;
+        }
+      }
+      if (changed || SUBJECTS.length > 0) {
+        metaUpdatedAt = Date.now();
+        await pushMeta();
+      }
+    }
+
+    NAMES = new Set(SUBJECTS.map(s => s.name));
+
+    // 4. Reconcile Prompts
+    const mergedPrompts = {};
+    for (const [k, v] of Object.entries(cloudPrompts)) {
+      if (NAMES.has(k) && (v || "").trim()) {
+        mergedPrompts[k] = v;
+      }
+    }
+    prompts = mergedPrompts;
+
+    saveLocalState();
+    cloudOK = true;
+    lastSync = new Date();
+    statusNow();
+    render();
+
+    if(!silent) toast(`☁ Synced · ${SUBJECTS.length} subject(s), ${Object.keys(prompts).length} prompt(s)`);
+  } catch(err) {
+    cloudOK = false;
+    statusNow();
+    if(!silent) toast("Sync failed: " + (err.message || err));
+  } finally {
+    isSyncing = false;
   }
 }
+
 async function savePromptValue(subject, text){
-  prompts[subject] = text; cacheLocal();
+  prompts[subject] = text;
+  dirtyPrompts.add(subject);
+  saveLocalState();
   if(!sb) return true;
-  try{ await pushRows([subject]); cloudOK = true; lastSync = new Date(); statusNow(); return true; }
-  catch(err){ cloudOK = false; statusNow(); toast("Saved in this browser, but cloud save failed: " + (err.message||err)); return true; }
-}
-async function deletePromptValue(subject){
-  delete prompts[subject]; cacheLocal();
-  if(!sb) return true;
-  try{ const { error } = await sb.from(TABLE).delete().eq("subject", subject); if(error) throw error; cloudOK = true; lastSync = new Date(); statusNow(); }
-  catch(err){ cloudOK = false; statusNow(); toast("Removed locally, but cloud delete failed: " + (err.message||err)); }
+  try {
+    await pushRows([subject]);
+    dirtyPrompts.delete(subject);
+    saveLocalState();
+    cloudOK = true; lastSync = new Date(); statusNow();
+  } catch(err) {
+    cloudOK = false; statusNow();
+    toast("Saved on this device; will sync to cloud when online.");
+  }
   return true;
+}
+
+async function deletePromptValue(subject){
+  delete prompts[subject];
+  dirtyPrompts.add(subject);
+  saveLocalState();
+  if(!sb) return true;
+  try {
+    const { error } = await sb.from(TABLE).delete().eq("subject", subject);
+    if(error) throw error;
+    dirtyPrompts.delete(subject);
+    saveLocalState();
+    cloudOK = true; lastSync = new Date(); statusNow();
+  } catch(err) {
+    cloudOK = false; statusNow();
+    toast("Removed locally; cloud sync pending connection.");
+  }
+  return true;
+}
+
+async function saveSubjectsAndSync() {
+  metaUpdatedAt = Date.now();
+  saveLocalState();
+  if(!sb) return;
+  try {
+    await pushMeta();
+    cloudOK = true; lastSync = new Date(); statusNow();
+  } catch(err) {
+    cloudOK = false; statusNow();
+    toast("Subject saved locally; will sync when online.");
+  }
 }
 
 /* ---------- UI ---------- */
@@ -502,7 +628,7 @@ function render(){
 function openCreateSubjectModal() {
   editingSubjectTarget = null;
   $("subjectModalTitle").textContent = "Create New Subject";
-  $("subjectModalDesc").textContent = "Add a new Forestry or exam subject to your library.";
+  $("subjectModalDesc").textContent = "Add a new Forestry or exam subject to your library. It will sync across all your devices.";
   $("subNameInput").value = "";
   $("subIconInput").value = "";
   $("subGroupInput").value = "";
@@ -517,7 +643,7 @@ function openRenameSubjectModal(name) {
   if(!sub) return;
   editingSubjectTarget = sub.name;
   $("subjectModalTitle").textContent = "Rename / Edit Subject";
-  $("subjectModalDesc").textContent = "Update the subject's name, icon emoji, or group tag.";
+  $("subjectModalDesc").textContent = "Update the subject's name, icon emoji, or group tag across all devices.";
   $("subNameInput").value = sub.name;
   $("subIconInput").value = sub.icon;
   $("subGroupInput").value = sub.group;
@@ -528,14 +654,14 @@ function openRenameSubjectModal(name) {
 }
 
 async function removeSubject(name) {
-  if(!confirm(`Remove "${name}" and any saved prompt attached to it?`)) return;
+  if(!confirm(`Remove "${name}" and any saved prompt attached to it across all devices?`)) return;
   const idx = SUBJECTS.findIndex(s => s.name === name);
   if(idx === -1) return;
   SUBJECTS.splice(idx, 1);
-  saveSubjects();
-  await deletePromptValue(name);
   $("subjectModal").close();
   render();
+  await saveSubjectsAndSync();
+  await deletePromptValue(name);
   toast(`Removed subject: ${name}`);
 }
 
@@ -550,6 +676,7 @@ $("saveSubjectBtn").onclick = async () => {
   const group = $("subGroupInput").value.trim() || "Forestry";
   
   if(!name) { toast("Subject name is required"); return; }
+  if(name === META_ROW_KEY) { toast("Reserved name, please choose another"); return; }
 
   // Creating a new subject
   if(!editingSubjectTarget) {
@@ -557,10 +684,10 @@ $("saveSubjectBtn").onclick = async () => {
     const colors = ["#65f0b3","#a7ef76","#ffe66d","#ffb86b","#78dfb2","#c4f26b","#5df6ff","#ff9b70"];
     const accent = colors[SUBJECTS.length % colors.length];
     SUBJECTS.push({ name, icon, group, accent });
-    saveSubjects();
     $("subjectModal").close();
     render();
-    toast(`Created subject: ${name}`);
+    await saveSubjectsAndSync();
+    toast(`Created & synced subject: ${name}`);
     return;
   }
 
@@ -576,16 +703,20 @@ $("saveSubjectBtn").onclick = async () => {
   sub.name = name;
   sub.icon = icon;
   sub.group = group;
-  saveSubjects();
-
-  if(name !== oldName && (prompts[oldName] || "").trim()) {
-    const existingPrompt = prompts[oldName];
-    await savePromptValue(name, existingPrompt);
-    await deletePromptValue(oldName);
-  }
 
   $("subjectModal").close();
-  render();
+  if(name !== oldName && (prompts[oldName] || "").trim()) {
+    const existingPrompt = prompts[oldName];
+    prompts[name] = existingPrompt;
+    delete prompts[oldName];
+    render();
+    await saveSubjectsAndSync();
+    await savePromptValue(name, existingPrompt);
+    await deletePromptValue(oldName);
+  } else {
+    render();
+    await saveSubjectsAndSync();
+  }
   toast(name !== oldName ? `Renamed "${oldName}" to "${name}"` : `Updated "${name}"`);
 };
 
@@ -619,15 +750,17 @@ $("closeModal").onclick=()=>$("editor").close();
 $("cancelEdit").onclick=()=>$("editor").close();
 $("savePrompt").onclick=async()=>{
   const name=activeSubject, text=$("promptText").value.trim();
+  $("editor").close();
   if(text) await savePromptValue(name,text); else await deletePromptValue(name);
-  $("editor").close(); render(); toast(text?`Saved prompt for ${name}`:"Prompt cleared");
+  render();
+  toast(text?`Saved & synced prompt for ${name}`:"Prompt cleared");
 };
 $("clearPrompt").onclick=async()=>{if(!activeSubject)return;await deletePromptValue(activeSubject);$("promptText").value="";render();toast("Prompt cleared");};
 $("syncBtn").onclick=()=>syncAll(false);
 
-/* ---------- Export / import ---------- */
+/* ---------- Export / Import ---------- */
 $("exportBtn").onclick=()=>{
- const data={app:"PromptDeck",version:4,exportedAt:new Date().toISOString(),subjects:SUBJECTS,prompts};
+ const data={app:"PromptDeck",version:5,exportedAt:new Date().toISOString(),subjects:SUBJECTS,prompts};
  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="promptdeck-backup.json";a.click();URL.revokeObjectURL(url);toast("Backup exported");
 };
@@ -637,34 +770,62 @@ $("importFile").addEventListener("change",async e=>{
  try{
   const data=JSON.parse(await file.text());
   if(data && Array.isArray(data.subjects)) {
-    SUBJECTS = data.subjects.filter(s => s && typeof s.name === "string" && s.name.trim());
-    saveSubjects();
+    SUBJECTS = data.subjects.filter(s => s && typeof s.name === "string" && s.name.trim() && s.name !== META_ROW_KEY);
+    NAMES = new Set(SUBJECTS.map(s => s.name));
   }
   const incoming=data && typeof data==="object" && !Array.isArray(data) ? (data.prompts || data) : null;
   if(!incoming || typeof incoming!=="object" || Array.isArray(incoming)) throw new Error("bad");
   
-  const valid=Object.entries(incoming).filter(([k,v])=>typeof v==="string" && v.trim());
-  
-  let addedNew = false;
+  const valid=Object.entries(incoming).filter(([k,v])=>k !== META_ROW_KEY && typeof v==="string" && v.trim());
   for(const [k,v] of valid) {
     if(!NAMES.has(k)) {
-      const newSub = { name: k, icon: "🌿", group: "Imported", accent: "#65f0b3" };
-      SUBJECTS.push(newSub);
+      SUBJECTS.push({ name: k, icon: "🌿", group: "Imported", accent: "#65f0b3" });
       NAMES.add(k);
-      addedNew = true;
     }
     prompts[k] = v.trim();
+    dirtyPrompts.add(k);
   }
-  if(addedNew) saveSubjects();
-  cacheLocal();
-  
-  if(sb && valid.length){ try{ await pushRows(valid.map(([k])=>k)); cloudOK=true; lastSync=new Date(); statusNow(); }catch(err){ cloudOK=false; statusNow(); toast("Imported locally; cloud upload failed: "+(err.message||err)); e.target.value=""; render(); return; } }
-  render(); toast(`Backup imported · ${valid.length} prompt(s) saved`);
+  await saveSubjectsAndSync();
+  if(sb && valid.length){
+    await pushRows(valid.map(([k])=>k));
+    dirtyPrompts.clear();
+    saveLocalState();
+  }
+  render();
+  toast(`Backup imported & synced · ${SUBJECTS.length} subject(s)`);
  }catch(err){ toast("That file doesn't look like a PromptDeck JSON backup."); }
  e.target.value="";
 });
 
-render(); statusNow(); syncAll(true);
+/* ---------- Automatic Real-Time & Multi-Device Sync Triggers ---------- */
+// Sync automatically when switching back to this tab/app on mobile or desktop
+window.addEventListener("focus", () => syncAll(true));
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) syncAll(true);
+});
+window.addEventListener("online", () => syncAll(false));
+
+// Periodic background sync every 30s while app is open
+setInterval(() => {
+  if (!document.hidden && !$("editor").open && !$("subjectModal").open) {
+    syncAll(true);
+  }
+}, 30000);
+
+// Subscribe to Supabase Realtime changes if enabled on the table
+if (sb && typeof sb.channel === "function") {
+  try {
+    sb.channel("promptdeck-live-sync")
+      .on("postgres_changes", { event: "*", schema: "public", table: TABLE }, () => {
+        if (!$("editor").open && !$("subjectModal").open) syncAll(true);
+      })
+      .subscribe();
+  } catch(e) {}
+}
+
+render();
+statusNow();
+syncAll(true);
 </script>
 </body>
 </html>
