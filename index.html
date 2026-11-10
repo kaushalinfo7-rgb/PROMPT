@@ -3,57 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prompt Playground · Subject Launcher</title>
+<title>Prompt Playground · Forestry Subject Launcher</title>
 <style>
-:root{--bg:#090b18;--ink:#f6f7ff;--muted:#a8b0d0;--panel:rgba(20,24,49,.72);--line:rgba(255,255,255,.13);--cyan:#5df6ff;--pink:#ff5fcf;--yellow:#ffe66d;--purple:#a78bfa}
+:root{--bg:#04110b;--ink:#f1fbf4;--muted:#9ec4ab;--panel:rgba(9,28,18,.74);--line:rgba(145,235,175,.16);--cyan:#65f0b3;--pink:#ffb86b;--yellow:#ffe66d;--purple:#a7ef76}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden;position:relative}
-body:after{content:"";position:fixed;inset:-35%;z-index:-3;pointer-events:none;background:radial-gradient(ellipse at 20% 10%,#1b0f4a 0%,transparent 55%),radial-gradient(ellipse at 85% 45%,#053a52 0%,transparent 55%),radial-gradient(ellipse at 40% 100%,#3a0d3d 0%,transparent 55%),#090b18;background-size:100% 100%;opacity:.92}
-.bg-orb{position:fixed;z-index:-2;border-radius:50%;filter:blur(70px);opacity:.4;pointer-events:none;animation:drift 14s ease-in-out infinite alternate}.orb1{width:360px;height:360px;background:#784dff;top:-100px;left:-80px}.orb2{width:400px;height:400px;background:#00d9ff;right:-130px;top:25% ;animation-delay:-5s}.orb3{width:320px;height:320px;background:#ff3eae;left:28%;bottom:-170px;animation-delay:-8s}
-body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(to bottom,black,transparent 95%)}
-@keyframes drift{to{transform:translate(45px,35px) scale(1.13)}}@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}@keyframes shimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(93,246,255,.15)}50%{box-shadow:0 0 0 8px rgba(93,246,255,0)}}
-.wrap{width:min(1180px,calc(100% - 36px));margin:auto;padding:30px 0 50px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:42px}.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.02em}.brand-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,var(--cyan),var(--purple),var(--pink));color:#080b19;font-size:22px;box-shadow:0 0 28px #5df6ff30}.top-pill{border:1px solid var(--line);background:#ffffff08;color:var(--muted);border-radius:999px;padding:9px 13px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-.hero{text-align:center;max-width:820px;margin:0 auto 34px;animation:pop .7s ease both}.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid #5df6ff40;background:#5df6ff0d;color:var(--cyan);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}h1{font-size:clamp(36px,6vw,66px);line-height:1.02;letter-spacing:-.055em;margin:20px 0 14px;font-weight:900}.gradient-text{background:linear-gradient(100deg,var(--cyan),#b7a0ff 45%,var(--pink),var(--yellow));background-size:200% auto;color:transparent;background-clip:text;-webkit-background-clip:text;animation:shimmer 7s linear infinite}.hero p{margin:0 auto;color:var(--muted);font-size:16px;line-height:1.7;max-width:630px}
-.toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:26px 0 18px}.searchbox{position:relative;flex:1;min-width:220px;max-width:430px}.searchbox span{position:absolute;left:15px;top:50%;transform:translateY(-50%);opacity:.65}.searchbox input{width:100%;padding:13px 15px 13px 42px;background:#ffffff09;border:1px solid var(--line);border-radius:14px;color:var(--ink);outline:none;transition:.2s}.searchbox input:focus{border-color:#5df6ff8a;box-shadow:0 0 0 3px #5df6ff14}.tool-actions{display:flex;gap:9px;flex-wrap:wrap}.small-btn{border:1px solid var(--line);background:#ffffff0a;color:var(--ink);padding:11px 14px;border-radius:12px;cursor:pointer;font-weight:700;transition:.2s}.small-btn:hover{border-color:#ffffff50;transform:translateY(-2px);background:#ffffff13}
+body:after{content:"";position:fixed;inset:-35%;z-index:-3;pointer-events:none;background:radial-gradient(ellipse at 20% 10%,#0d3822 0%,transparent 55%),radial-gradient(ellipse at 85% 45%,#072b26 0%,transparent 55%),radial-gradient(ellipse at 40% 100%,#1a2e12 0%,transparent 55%),#04110b;background-size:100% 100%;opacity:.94}
+.bg-orb{position:fixed;z-index:-2;border-radius:50%;filter:blur(80px);opacity:.32;pointer-events:none;animation:drift 16s ease-in-out infinite alternate}.orb1{width:380px;height:380px;background:#2bd980;top:-110px;left:-80px}.orb2{width:420px;height:420px;background:#8ce65a;right:-130px;top:22%;animation-delay:-5s}.orb3{width:340px;height:340px;background:#f5c851;left:28%;bottom:-170px;animation-delay:-8s}
+@keyframes drift{to{transform:translate(45px,35px) scale(1.13)}}@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}@keyframes shimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.wrap{width:min(1180px,calc(100% - 36px));margin:auto;padding:30px 0 50px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:42px}.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.02em}.brand-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,var(--cyan),var(--purple),var(--yellow));color:#04110b;font-size:22px;box-shadow:0 0 28px #65f0b335}.top-pill{border:1px solid var(--line);background:#ffffff08;color:var(--muted);border-radius:999px;padding:9px 13px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;backdrop-filter:blur(6px)}
+.hero{text-align:center;max-width:820px;margin:0 auto 34px;animation:pop .7s ease both}.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid #65f0b340;background:#65f0b312;color:var(--cyan);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}h1{font-size:clamp(36px,6vw,66px);line-height:1.02;letter-spacing:-.055em;margin:20px 0 14px;font-weight:900}.gradient-text{background:linear-gradient(100deg,var(--cyan),#a7ef76 45%,var(--yellow),var(--pink));background-size:200% auto;color:transparent;background-clip:text;-webkit-background-clip:text;animation:shimmer 7s linear infinite}.hero p{margin:0 auto;color:var(--muted);font-size:16px;line-height:1.7;max-width:630px}
+.toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:26px 0 18px}.searchbox{position:relative;flex:1;min-width:220px;max-width:430px}.searchbox span{position:absolute;left:15px;top:50%;transform:translateY(-50%);opacity:.65}.searchbox input{width:100%;padding:13px 15px 13px 42px;background:rgba(10,28,18,.68);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;color:var(--ink);outline:none;transition:.2s}.searchbox input:focus{border-color:#65f0b38a;box-shadow:0 0 0 3px #65f0b318}.tool-actions{display:flex;gap:9px;flex-wrap:wrap}.small-btn{border:1px solid var(--line);background:rgba(12,32,20,.68);backdrop-filter:blur(8px);color:var(--ink);padding:11px 14px;border-radius:12px;cursor:pointer;font-weight:700;transition:.2s}.small-btn:hover{border-color:#a7ef7670;transform:translateY(-2px);background:rgba(24,56,36,.78)}
 .section-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:27px 2px 14px}.section-head h2{margin:0;font-size:15px;letter-spacing:.12em;text-transform:uppercase}.section-head span{font-size:12px;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.subject-card{--accent:var(--cyan);position:relative;isolation:isolate;min-height:164px;padding:19px;border-radius:21px;border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:18px;transition:transform .25s,border-color .25s,background .25s;animation:pop .5s ease both}.subject-card:before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;background:radial-gradient(circle at 90% 0%,color-mix(in srgb,var(--accent) 23%,transparent),transparent 52%);transition:opacity .25s}.subject-card:hover{transform:translateY(-5px);border-color:color-mix(in srgb,var(--accent) 65%,white 5%);background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.035))}.subject-card:hover:before{opacity:1}.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.subject-icon{width:43px;height:43px;display:grid;place-items:center;border-radius:14px;background:color-mix(in srgb,var(--accent) 15%,transparent);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);font-size:22px;animation:float 5s ease-in-out infinite}.card-tag{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 8px}.subject-card h3{font-size:17px;line-height:1.3;margin:0;font-weight:800;letter-spacing:-.02em}.card-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px}.status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}.status-dot{width:6px;height:6px;background:#7b829e;border-radius:50%}.status.ready{color:#9ef8ce}.status.ready .status-dot{background:#65f0b3;box-shadow:0 0 9px #65f0b3}.copy-btn{border:0;border-radius:11px;padding:10px 12px;background:var(--accent);color:#101226;font-weight:900;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:transform .2s,filter .2s;white-space:nowrap}.copy-btn:hover{transform:scale(1.04);filter:brightness(1.1)}.copy-btn:active{transform:scale(.97)}.copy-btn:disabled{background:#353951;color:#8b91ad;cursor:not-allowed;filter:none}.empty{grid-column:1/-1;text-align:center;padding:35px;border:1px dashed var(--line);border-radius:18px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.subject-card{--accent:var(--cyan);position:relative;isolation:isolate;min-height:164px;padding:19px;border-radius:21px;border:1px solid var(--line);background:linear-gradient(145deg,rgba(14,38,24,.78),rgba(7,22,14,.62));backdrop-filter:blur(10px);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:18px;transition:transform .25s,border-color .25s,background .25s;animation:pop .5s ease both}.subject-card:before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;background:radial-gradient(circle at 90% 0%,color-mix(in srgb,var(--accent) 25%,transparent),transparent 52%);transition:opacity .25s}.subject-card:hover{transform:translateY(-5px);border-color:color-mix(in srgb,var(--accent) 65%,white 5%);background:linear-gradient(145deg,rgba(20,52,33,.85),rgba(10,29,18,.7))}.subject-card:hover:before{opacity:1}.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.subject-icon{width:43px;height:43px;display:grid;place-items:center;border-radius:14px;background:color-mix(in srgb,var(--accent) 15%,transparent);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);font-size:22px;animation:float 5s ease-in-out infinite}.card-tag{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 8px}.subject-card h3{font-size:17px;line-height:1.3;margin:0;font-weight:800;letter-spacing:-.02em}.card-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px}.card-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}.status-dot{width:6px;height:6px;background:#6c8c77;border-radius:50%}.status.ready{color:#9ef8ce}.status.ready .status-dot{background:#65f0b3;box-shadow:0 0 9px #65f0b3}.copy-btn{border:0;border-radius:11px;padding:10px 12px;background:var(--accent);color:#061a0e;font-weight:900;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:transform .2s,filter .2s;white-space:nowrap}.copy-btn:hover{transform:scale(1.04);filter:brightness(1.1)}.copy-btn:active{transform:scale(.97)}.copy-btn:disabled{background:#213b2c;color:#789985;cursor:not-allowed;filter:none}.empty{grid-column:1/-1;text-align:center;padding:35px;border:1px dashed var(--line);border-radius:18px;color:var(--muted);background:rgba(8,24,15,.55);backdrop-filter:blur(8px)}
 .footer{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:28px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}.keycap{font-family:monospace;border:1px solid var(--line);padding:3px 6px;border-radius:5px;color:var(--ink)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;padding:13px 17px;border-radius:14px;background:#e9fff6;color:#0a3426;font-weight:800;font-size:13px;box-shadow:0 15px 45px #0006;transition:.25s;z-index:20;max-width:calc(100% - 30px);text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}
-dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid #ffffff25;border-radius:22px;background:#11152b;color:var(--ink);box-shadow:0 30px 100px #000b}dialog::backdrop{background:#02030bcc;backdrop-filter:blur(7px)}.modal-head{padding:21px 22px 15px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}.modal-head h2{margin:0;font-size:20px}.close{border:1px solid var(--line);background:#ffffff0b;color:white;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:18px}.modal-body{padding:20px 22px 22px}.modal-body p{color:var(--muted);font-size:13px;line-height:1.6;margin-top:0}.modal-body textarea{width:100%;min-height:240px;resize:vertical;background:#080b19;border:1px solid #343956;border-radius:14px;padding:15px;color:#f5f6ff;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;outline:none}.modal-body textarea:focus{border-color:var(--cyan)}.modal-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px}.primary{border:0;background:linear-gradient(100deg,var(--cyan),#a9a0ff);color:#080b19;font-weight:900;padding:12px 17px;border-radius:12px;cursor:pointer}.danger{color:#ff9eaf}.hidden{display:none!important}
+dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid var(--line);border-radius:22px;background:#0a1f14;color:var(--ink);box-shadow:0 30px 100px #000b}dialog::backdrop{background:#020905cc;backdrop-filter:blur(7px)}.modal-head{padding:21px 22px 15px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}.modal-head h2{margin:0;font-size:20px}.close{border:1px solid var(--line);background:#ffffff0b;color:white;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:18px}.modal-body{padding:20px 22px 22px}.modal-body p{color:var(--muted);font-size:13px;line-height:1.6;margin-top:0}.modal-body textarea{width:100%;min-height:240px;resize:vertical;background:#05120b;border:1px solid #264d36;border-radius:14px;padding:15px;color:#f1fbf4;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;outline:none}.modal-body textarea:focus{border-color:var(--cyan)}.modal-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px}.primary{border:0;background:linear-gradient(100deg,var(--cyan),#a7ef76);color:#04110b;font-weight:900;padding:12px 17px;border-radius:12px;cursor:pointer}.danger{color:#ff9eaf;border-color:rgba(255,158,175,.28)}.danger:hover{border-color:#ff9eaf;background:rgba(255,158,175,.12)}.hidden{display:none!important}
 @media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{width:min(100% - 28px,700px)}}
 @media(max-width:520px){.grid{grid-template-columns:1fr}.topbar{margin-bottom:32px}.top-pill{display:none}.hero p{font-size:14px}.subject-card{min-height:145px}.footer{align-items:flex-start;flex-direction:column}.toolbar{align-items:stretch}.searchbox{max-width:none}.tool-actions{display:grid;grid-template-columns:1fr 1fr}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
-.auth-input{width:100%;background:#080b19;border:1px solid #343956;border-radius:12px;padding:12px 14px;color:#f5f6ff;font:14px system-ui,sans-serif;outline:none;margin-bottom:10px}.auth-input:focus{border-color:var(--cyan)}.sync-pill{font-size:12px;color:var(--muted)}.sync-pill b{color:var(--cyan)}
-
+.auth-input{width:100%;background:#05120b;border:1px solid #264d36;border-radius:12px;padding:12px 14px;color:#f1fbf4;font:14px system-ui,sans-serif;outline:none;margin-bottom:10px}.auth-input:focus{border-color:var(--cyan)}.sync-pill{font-size:12px;color:var(--muted)}.sync-pill b{color:var(--cyan)}
 #bgCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
-.shape{position:fixed;z-index:-1;pointer-events:none;border:1.5px solid rgba(255,255,255,.12);opacity:.7;animation:shapeFloat 22s ease-in-out infinite alternate}
-.shape.ring{border-radius:50%}.shape.sq{border-radius:14px}.shape.tri{width:0!important;height:0!important;border:none;border-left:40px solid transparent;border-right:40px solid transparent;border-bottom:70px solid rgba(93,246,255,.07)}
-.shape.s1{width:130px;height:130px;top:14%;left:6%;border-color:rgba(93,246,255,.25)}
-.shape.s2{width:90px;height:90px;top:62%;left:4%;animation-delay:-6s;animation-duration:26s;border-color:rgba(255,95,207,.22)}
-.shape.s3{width:170px;height:170px;top:20%;right:5%;animation-delay:-10s;border-color:rgba(167,139,250,.25)}
-.shape.s4{top:72%;right:9%;animation-delay:-4s}
-.shape.s5{width:70px;height:70px;top:46%;right:20%;animation-delay:-14s;border-color:rgba(255,230,109,.22)}
-.shape.s6{width:200px;height:200px;bottom:-60px;left:38%;animation-delay:-8s;border-color:rgba(93,246,255,.14)}
-@keyframes shapeFloat{from{transform:translate(0,0) rotate(0deg)}to{transform:translate(30px,-40px) rotate(90deg)}}
-@media(max-width:700px){.shape{display:none}}
 </style>
 </head>
 <body>
 <canvas id="bgCanvas"></canvas>
-<div class="shape ring s1"></div><div class="shape sq s2"></div><div class="shape ring s3"></div><div class="shape tri s4"></div><div class="shape sq s5"></div><div class="shape ring s6"></div>
 <div class="bg-orb orb1"></div><div class="bg-orb orb2"></div><div class="bg-orb orb3"></div>
 <main class="wrap">
   <header class="topbar">
-    <div class="brand"><div class="brand-icon">✦</div><span>PROMPT<span style="color:var(--cyan)">DECK</span></span></div>
-    <div class="top-pill">✧ Your personal prompt launcher</div>
+    <div class="brand"><div class="brand-icon">🌲</div><span>PROMPT<span style="color:var(--cyan)">DECK</span></span></div>
+    <div class="top-pill">🌿 Forestry Exam · Prompt Launcher</div>
   </header>
   <section class="hero">
-    <div class="eyebrow"><i></i> Study workflow · one-click access</div>
+    <div class="eyebrow"><i></i> Forestry prep workflow · one-click access</div>
     <h1>Your subjects.<br><span class="gradient-text">Your prompts.</span></h1>
-    <p>A fast, colourful home for your study prompts. Add each subject's prompt once, then copy it instantly whenever you need it.</p>
+    <p>A fast, dynamic woodland home for your Forestry study prompts. Add each subject's prompt once, then copy it instantly whenever you need it.</p>
   </section>
   <div class="toolbar">
     <label class="searchbox"><span>⌕</span><input id="search" type="search" placeholder="Find a subject…" aria-label="Search subjects"></label>
     <div class="tool-actions">
+      <button class="small-btn" id="newSubjectBtn" style="border-color:var(--cyan); color:var(--cyan); background:#65f0b314">＋ New subject</button>
       <button class="small-btn" id="syncBtn">☁ Sync now</button>
       <button class="small-btn" id="editAll">✎ Manage prompts</button>
       <button class="small-btn" id="exportBtn">↗ Export backup</button>
@@ -61,11 +49,13 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid #ffffff25;b
       <input id="importFile" type="file" accept="application/json,.json" class="hidden">
     </div>
   </div>
-  <div class="section-head"><h2>✦ Your subject library</h2><span id="counter">0 subjects</span></div>
+  <div class="section-head"><h2>🌿 Your subject library</h2><span id="counter">0 subjects</span></div>
   <section class="grid" id="grid" aria-live="polite"></section>
-  <footer class="footer"><span>Built for focus. Designed for flow. ✦</span><span class="sync-pill" id="syncStatus">Storage: <b>checking…</b></span></footer>
+  <footer class="footer"><span>Cultivated for focus. Designed for Forestry success. 🌲</span><span class="sync-pill" id="syncStatus">Storage: <b>checking…</b></span></footer>
 </main>
 <div class="toast" id="toast" role="status"></div>
+
+<!-- Prompt Editor Modal -->
 <dialog id="editor">
   <div class="modal-head"><h2 id="modalTitle">Edit subject prompt</h2><button class="close" id="closeModal" aria-label="Close">×</button></div>
   <div class="modal-body">
@@ -74,64 +64,344 @@ dialog{width:min(680px,calc(100% - 28px));padding:0;border:1px solid #ffffff25;b
     <div class="modal-actions"><button class="small-btn danger" id="clearPrompt">Clear prompt</button><div style="display:flex;gap:9px"><button class="small-btn" id="cancelEdit">Cancel</button><button class="primary" id="savePrompt">Save prompt ✓</button></div></div>
   </div>
 </dialog>
+
+<!-- Create / Rename Subject Modal -->
+<dialog id="subjectModal">
+  <div class="modal-head"><h2 id="subjectModalTitle">Create New Subject</h2><button class="close" id="closeSubjectModal" aria-label="Close">×</button></div>
+  <div class="modal-body">
+    <p id="subjectModalDesc" style="margin-bottom: 20px;">Add a new subject or category to your library.</p>
+    <input type="text" id="subNameInput" class="auth-input" placeholder="Subject Name (e.g. Silviculture)" autocomplete="off">
+    <input type="text" id="subIconInput" class="auth-input" placeholder="Icon Emoji (e.g. 🌲)" autocomplete="off">
+    <input type="text" id="subGroupInput" class="auth-input" placeholder="Group (e.g. Core Forestry)" autocomplete="off">
+    <div class="modal-actions" style="margin-top: 20px;">
+      <button class="small-btn danger hidden" id="deleteSubjectBtn">🗑 Remove subject</button>
+      <div style="display:flex;gap:9px;margin-left:auto">
+        <button class="small-btn" id="cancelSubjectModal">Cancel</button>
+        <button class="primary" id="saveSubjectBtn">Create Subject ＋</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
 <script>
+/* ================= DYNAMIC INTERACTIVE FORESTRY CANVAS ================= */
 (function(){
-  const c=document.getElementById("bgCanvas"),x=c.getContext("2d");
-  const still=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let w,h,dpr,pts=[],mouse={x:-999,y:-999};
-  function size(){
-    dpr=Math.min(window.devicePixelRatio||1,2);w=innerWidth;h=innerHeight;
-    c.width=w*dpr;c.height=h*dpr;x.setTransform(dpr,0,0,dpr,0,0);
-    const n=Math.round(Math.min(90,Math.max(30,w*h/18000)));
-    pts=Array.from({length:n},()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.6+.6}));
-  }
-  function draw(){
-    x.clearRect(0,0,w,h);
-    for(const p of pts){
-      if(!still){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;}
-    }
-    for(let i=0;i<pts.length;i++){
-      const a=pts[i];
-      for(let j=i+1;j<pts.length;j++){
-        const b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y);
-        if(d<130){x.strokeStyle="rgba(93,246,255,"+(0.16*(1-d/130))+")";x.lineWidth=1;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke();}
+  const c = document.getElementById("bgCanvas"), ctx = c.getContext("2d");
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let w, h, dpr, time = 0;
+  let trees = [], fireflies = [], leaves = [], spores = [];
+  const mouse = { x: -999, y: -999, vx: 0, vy: 0, px: 0.5, py: 0.5, tx: 0.5, ty: 0.5, active: false };
+
+  function initScene() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = innerWidth; h = innerHeight;
+    c.width = w * dpr; c.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // 3 Parallax layers of pine / forest trees along the horizon
+    trees = [];
+    const layers = [
+      { count: Math.ceil(w / 55), depth: 0.25, minH: 130, maxH: 230, color: "rgba(8, 30, 18, 0.55)" },
+      { count: Math.ceil(w / 70), depth: 0.55, minH: 100, maxH: 185, color: "rgba(5, 22, 13, 0.78)" },
+      { count: Math.ceil(w / 95), depth: 1.0,  minH: 75,  maxH: 145, color: "rgba(3, 14, 8, 0.94)" }
+    ];
+    layers.forEach(L => {
+      for (let i = -1; i <= L.count + 1; i++) {
+        trees.push({
+          baseX: (i / L.count) * w + (Math.random() - 0.5) * 45,
+          th: L.minH + Math.random() * (L.maxH - L.minH),
+          tw: 34 + Math.random() * 38,
+          depth: L.depth,
+          color: L.color,
+          swayOffset: Math.random() * Math.PI * 2,
+          tiers: 3 + Math.floor(Math.random() * 2)
+        });
       }
-      const m=Math.hypot(a.x-mouse.x,a.y-mouse.y);
-      if(m<160){x.strokeStyle="rgba(255,255,255,"+(0.28*(1-m/160))+")";x.beginPath();x.moveTo(a.x,a.y);x.lineTo(mouse.x,mouse.y);x.stroke();}
-      x.fillStyle="rgba(190,235,255,.65)";x.beginPath();x.arc(a.x,a.y,a.r,0,6.283);x.fill();
-    }
-    if(!still&&!document.hidden)requestAnimationFrame(draw);
+    });
+
+    // Bioluminescent fireflies
+    const fCount = Math.round(Math.min(75, Math.max(28, (w * h) / 20000)));
+    fireflies = Array.from({ length: fCount }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      r: 1.2 + Math.random() * 2.2,
+      phase: Math.random() * Math.PI * 2,
+      speed: 0.02 + Math.random() * 0.03,
+      hue: Math.random() > 0.35 ? "145, 255, 175" : "255, 232, 115"
+    }));
+
+    // Floating botanical leaves
+    const lCount = Math.round(Math.min(32, Math.max(14, w / 55)));
+    leaves = Array.from({ length: lCount }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: 0.25 + Math.random() * 0.45,
+      vy: 0.35 + Math.random() * 0.55,
+      size: 6 + Math.random() * 7,
+      angle: Math.random() * Math.PI * 2,
+      vAngle: (Math.random() - 0.5) * 0.025,
+      flip: Math.random() * Math.PI * 2,
+      vFlip: 0.02 + Math.random() * 0.03,
+      color: Math.random() > 0.3 ? "rgba(101, 240, 179, 0.42)" : "rgba(185, 245, 115, 0.38)"
+    }));
   }
-  addEventListener("resize",()=>{size();draw();});
-  addEventListener("mousemove",e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
-  addEventListener("mouseleave",()=>{mouse.x=mouse.y=-999;});
-  document.addEventListener("visibilitychange",()=>{if(!document.hidden&&!still)requestAnimationFrame(draw);});
-  size();draw();
+
+  function drawSunbeams() {
+    ctx.save();
+    const beamShift = (mouse.px - 0.5) * 140;
+    for (let i = 0; i < 4; i++) {
+      const topX = w * (0.18 + i * 0.22) + beamShift * 0.4;
+      const botX = topX + 180 + beamShift * 1.1 + Math.sin(time * 0.4 + i) * 35;
+      const grad = ctx.createLinearGradient(topX, 0, botX, h * 0.9);
+      grad.addColorStop(0, "rgba(145, 250, 175, 0.06)");
+      grad.addColorStop(0.5, "rgba(255, 230, 120, 0.025)");
+      grad.addColorStop(1, "rgba(101, 240, 179, 0)");
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(topX - 45, 0);
+      ctx.lineTo(topX + 45, 0);
+      ctx.lineTo(botX + 130, h);
+      ctx.lineTo(botX - 130, h);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawPine(t, windShift) {
+    const parallaxX = (mouse.px - 0.5) * -75 * t.depth;
+    const parallaxY = (mouse.py - 0.5) * -18 * t.depth;
+    const x = t.baseX + parallaxX;
+    const baseY = h + 22 + parallaxY;
+    const sway = Math.sin(time * 1.1 + t.swayOffset) * (3.5 * t.depth) + windShift * t.depth;
+
+    ctx.fillStyle = t.color;
+    for (let i = 0; i < t.tiers; i++) {
+      const progress = i / t.tiers;
+      const tierBottom = baseY - t.th * (progress * 0.72);
+      const tierTop = baseY - t.th * ((i + 1) / t.tiers);
+      const halfW = t.tw * (1 - progress * 0.58);
+      const tipX = x + sway * ((i + 1) / t.tiers);
+      const botSway = sway * (i / t.tiers);
+
+      ctx.beginPath();
+      ctx.moveTo(tipX, tierTop);
+      ctx.lineTo(x + halfW + botSway, tierBottom);
+      ctx.lineTo(x - halfW + botSway, tierBottom);
+      ctx.closePath();
+      ctx.fill();
+    }
+  }
+
+  function drawLeaf(lf) {
+    ctx.save();
+    ctx.translate(lf.x, lf.y);
+    ctx.rotate(lf.angle);
+    ctx.scale(1, Math.max(0.28, Math.abs(Math.cos(lf.flip))));
+    ctx.fillStyle = lf.color;
+    ctx.beginPath();
+    ctx.moveTo(-lf.size, 0);
+    ctx.quadraticCurveTo(0, -lf.size * 0.65, lf.size, 0);
+    ctx.quadraticCurveTo(0, lf.size * 0.65, -lf.size, 0);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(220, 255, 225, 0.35)";
+    ctx.lineWidth = 0.7;
+    ctx.beginPath();
+    ctx.moveTo(-lf.size * 0.85, 0);
+    ctx.lineTo(lf.size * 0.85, 0);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    if (!still) time += 0.016;
+
+    // Smooth mouse parallax interpolation
+    mouse.px += (mouse.tx - mouse.px) * 0.06;
+    mouse.py += (mouse.ty - mouse.py) * 0.06;
+    mouse.vx *= 0.9;
+    mouse.vy *= 0.9;
+
+    drawSunbeams();
+
+    // Cursor spotlight aura in the forest mist
+    if (mouse.active) {
+      const aura = ctx.createRadialGradient(mouse.x, mouse.y, 8, mouse.x, mouse.y, 220);
+      aura.addColorStop(0, "rgba(101, 240, 179, 0.11)");
+      aura.addColorStop(0.5, "rgba(167, 239, 118, 0.04)");
+      aura.addColorStop(1, "rgba(101, 240, 179, 0)");
+      ctx.fillStyle = aura;
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 220, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Update & draw leaves affected by cursor breeze
+    for (const lf of leaves) {
+      if (!still) {
+        if (mouse.active) {
+          const dx = lf.x - mouse.x, dy = lf.y - mouse.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 170 && dist > 1) {
+            const push = (1 - dist / 170) * 0.9;
+            lf.vx += (dx / dist) * push * 0.18 + mouse.vx * 0.015;
+            lf.vy += (dy / dist) * push * 0.18 + mouse.vy * 0.015;
+            lf.vAngle += (mouse.vx * 0.0008);
+          }
+        }
+        lf.vx = lf.vx * 0.985 + 0.005;
+        lf.vy = Math.min(1.4, Math.max(-0.8, lf.vy * 0.985 + 0.008));
+        lf.x += lf.vx + Math.sin(time + lf.y * 0.01) * 0.25;
+        lf.y += lf.vy;
+        lf.angle += lf.vAngle;
+        lf.flip += lf.vFlip;
+        if (lf.x > w + 20) lf.x = -20;
+        if (lf.x < -20) lf.x = w + 20;
+        if (lf.y > h + 20) { lf.y = -20; lf.x = Math.random() * w; }
+      }
+      drawLeaf(lf);
+    }
+
+    // Update & draw fireflies + ecological web around cursor
+    for (let i = 0; i < fireflies.length; i++) {
+      const f = fireflies[i];
+      if (!still) {
+        f.phase += f.speed;
+        if (mouse.active) {
+          const dx = mouse.x - f.x, dy = mouse.y - f.y;
+          const d = Math.hypot(dx, dy);
+          if (d < 220 && d > 28) {
+            // Gently orbit & gravitate toward the cursor
+            f.vx += (dx / d) * 0.022 - (dy / d) * 0.012;
+            f.vy += (dy / d) * 0.022 + (dx / d) * 0.012;
+          } else if (d <= 28 && d > 1) {
+            f.vx -= (dx / d) * 0.04;
+            f.vy -= (dy / d) * 0.04;
+          }
+        }
+        f.vx = Math.max(-1.4, Math.min(1.4, f.vx * 0.985 + (Math.random() - 0.5) * 0.04));
+        f.vy = Math.max(-1.4, Math.min(1.4, f.vy * 0.985 + (Math.random() - 0.5) * 0.04));
+        f.x += f.vx; f.y += f.vy;
+        if (f.x < 0) f.x = w; if (f.x > w) f.x = 0;
+        if (f.y < 0) f.y = h; if (f.y > h) f.y = 0;
+      }
+
+      // Connect nearby fireflies to cursor like a canopy ecosystem web
+      if (mouse.active) {
+        const md = Math.hypot(f.x - mouse.x, f.y - mouse.y);
+        if (md < 155) {
+          ctx.strokeStyle = `rgba(101, 240, 179, ${(1 - md / 155) * 0.28})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(f.x, f.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+        }
+      }
+
+      const alpha = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(f.phase));
+      const glow = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r * 5);
+      glow.addColorStop(0, `rgba(${f.hue}, ${alpha})`);
+      glow.addColorStop(1, `rgba(${f.hue}, 0)`);
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r * 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = `rgba(245, 255, 230, ${Math.min(1, alpha + 0.2)})`;
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r * 0.75, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Draw cursor spore trail particles
+    for (let i = spores.length - 1; i >= 0; i--) {
+      const sp = spores[i];
+      sp.x += sp.vx;
+      sp.y += sp.vy;
+      sp.life -= 0.024;
+      if (sp.life <= 0) { spores.splice(i, 1); continue; }
+      ctx.fillStyle = `rgba(${sp.hue}, ${sp.life * 0.75})`;
+      ctx.beginPath();
+      ctx.arc(sp.x, sp.y, sp.r * sp.life, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Draw parallax forest horizon layers
+    const windShift = mouse.vx * 0.35;
+    for (const t of trees) drawPine(t, windShift);
+
+    if (!still && !document.hidden) requestAnimationFrame(draw);
+  }
+
+  addEventListener("resize", () => { initScene(); draw(); });
+  addEventListener("mousemove", e => {
+    mouse.vx = e.clientX - (mouse.active ? mouse.x : e.clientX);
+    mouse.vy = e.clientY - (mouse.active ? mouse.y : e.clientY);
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouse.tx = e.clientX / Math.max(1, w);
+    mouse.ty = e.clientY / Math.max(1, h);
+    mouse.active = true;
+
+    // Spawn glowing botanical spores on mouse movement
+    if (!still && Math.hypot(mouse.vx, mouse.vy) > 3 && spores.length < 65) {
+      spores.push({
+        x: mouse.x + (Math.random() - 0.5) * 14,
+        y: mouse.y + (Math.random() - 0.5) * 14,
+        vx: (Math.random() - 0.5) * 1.1 + mouse.vx * 0.05,
+        vy: -0.4 - Math.random() * 0.8 + mouse.vy * 0.05,
+        r: 1.6 + Math.random() * 2.2,
+        life: 1,
+        hue: Math.random() > 0.4 ? "101, 240, 179" : "255, 230, 109"
+      });
+    }
+  });
+  addEventListener("mouseleave", () => {
+    mouse.active = false;
+    mouse.x = mouse.y = -999;
+    mouse.tx = 0.5; mouse.ty = 0.5;
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && !still) requestAnimationFrame(draw);
+  });
+
+  initScene();
+  draw();
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-const SUBJECTS = [
- {name:"General Studies",icon:"🌐",group:"Core",accent:"#5df6ff"},
- {name:"History",icon:"🏛️",group:"General Studies",accent:"#ffb86b"},
- {name:"Geography",icon:"🗺️",group:"General Studies",accent:"#45e6ff"},
- {name:"Panchayati Raj",icon:"🏘️",group:"General Studies",accent:"#c4f26b"},
- {name:"Current Affairs",icon:"📰",group:"General Studies",accent:"#ff7a90"},
- {name:"General Hindi",icon:"🪷",group:"Language",accent:"#ff83c7"},
- {name:"General English",icon:"🔤",group:"Language",accent:"#b8a0ff"},
- {name:"Chhattisgarhi Language",icon:"🌾",group:"Language",accent:"#ffe66d"},
- {name:"Intelligence, Analytical & Logical Ability",icon:"🧠",group:"Aptitude",accent:"#ff9b70"},
- {name:"Chemistry",icon:"⚗️",group:"Science",accent:"#68e6a6"},
- {name:"Physics",icon:"⚛️",group:"Science",accent:"#7da8ff"},
- {name:"Biology",icon:"🧬",group:"Science",accent:"#a7ef76"},
- {name:"Technology",icon:"🛸",group:"Science & Tech",accent:"#5df6ff"},
- {name:"Environment",icon:"🌱",group:"Applied GS",accent:"#65f0b3"},
- {name:"Agriculture",icon:"🌻",group:"Applied GS",accent:"#ffe66d"},
- {name:"Forestry",icon:"🌲",group:"Applied GS",accent:"#78dfb2"},
- {name:"NOTES CREATION",icon:"📝",group:"Tools",accent:"#b69cff"},
- {name:"DIAGRAM CREATION",icon:"📐",group:"Tools",accent:"#ff9bd2"},
- {name:"PYQ FINDER",icon:"🔍",group:"Tools",accent:"#ffd36b"}
-];
+const DEFAULT_SUBJECTS = [];
+
+const SUBJECTS_KEY = "promptDeck.subjects.v3";
+const LOCAL_KEY = "promptDeck.subjectPrompts.v3";
+
+// Clear legacy storage keys so old preloaded subjects don't come back
+try {
+  localStorage.removeItem("promptDeck.subjects.v2");
+  localStorage.removeItem("promptDeck.customSubjects");
+  localStorage.removeItem("promptDeck.subjectPrompts.v1");
+  localStorage.removeItem("promptDeck.subjectPrompts.v2");
+} catch(e) {}
+
+let SUBJECTS = [];
+try {
+  const saved = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || "null");
+  SUBJECTS = Array.isArray(saved) ? saved : [...DEFAULT_SUBJECTS];
+} catch(e) {
+  SUBJECTS = [...DEFAULT_SUBJECTS];
+}
+
+let NAMES = new Set(SUBJECTS.map(s => s.name));
+function saveSubjects() {
+  NAMES = new Set(SUBJECTS.map(s => s.name));
+  try { localStorage.setItem(SUBJECTS_KEY, JSON.stringify(SUBJECTS)); } catch(e) {}
+}
+saveSubjects();
 
 /* ================= SUPABASE SETTINGS ================= */
 const SUPABASE_URL = "https://jxozwhyroherxojhkslg.supabase.co";
@@ -139,14 +409,11 @@ const SUPABASE_ANON_KEY = "sb_publishable_zQcr8lTMQnzwyEw5DN4j-w_kdoJfYQj";
 const TABLE = "promptdeck_prompts";
 /* ===================================================== */
 
-const LOCAL_KEY = "promptDeck.subjectPrompts.v2";
-try { localStorage.removeItem("promptDeck.subjectPrompts.v1"); } catch(e) {}
 let sb = null;
 try { if (window.supabase) sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch(e) { sb = null; }
 
 const $ = id => document.getElementById(id);
-const NAMES = new Set(SUBJECTS.map(s => s.name));
-let prompts = {}, activeSubject = null, cloudOK = false, lastSync = null;
+let prompts = {}, activeSubject = null, editingSubjectTarget = null, cloudOK = false, lastSync = null;
 try { prompts = JSON.parse(localStorage.getItem(LOCAL_KEY) || "{}") || {}; } catch(e) { prompts = {}; }
 
 function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
@@ -173,7 +440,7 @@ async function pullAll(){
   if(error) throw error;
   return Object.fromEntries((data||[]).filter(r => NAMES.has(r.subject)).map(r => [r.subject, r.prompt]));
 }
-// Pull cloud → merge; any prompt that exists only in this browser is uploaded to the cloud.
+
 async function syncAll(silent){
   if(!sb) { if(!silent) toast("Supabase library didn't load — check your connection."); return; }
   try{
@@ -193,7 +460,6 @@ async function syncAll(silent){
   }
 }
 async function savePromptValue(subject, text){
-  const prev = prompts[subject];
   prompts[subject] = text; cacheLocal();
   if(!sb) return true;
   try{ await pushRows([subject]); cloudOK = true; lastSync = new Date(); statusNow(); return true; }
@@ -212,18 +478,119 @@ function render(){
   const q=$("search").value.trim().toLowerCase();
   const items=SUBJECTS.filter(s=>s.name.toLowerCase().includes(q)||s.group.toLowerCase().includes(q));
   $("counter").textContent = `${SUBJECTS.length} subjects · ${SUBJECTS.filter(s=>(prompts[s.name]||"").trim()).length} prompts ready`;
+  if(!SUBJECTS.length) {
+    $("grid").innerHTML = `<div class="empty">Your Forestry library is empty. Click <b>＋ New subject</b> above to plant your first subject! 🌱</div>`;
+    return;
+  }
   $("grid").innerHTML = items.length ? items.map((s,i)=>{
     const ready=!!(prompts[s.name]||"").trim();
-    return `<article class="subject-card" style="--accent:${s.accent};animation-delay:${i*35}ms">
-     <div class="card-top"><div class="subject-icon">${s.icon}</div><span class="card-tag">${s.group}</span></div>
+    return `<article class="subject-card" style="--accent:${s.accent};animation-delay:${(i%15)*35}ms">
+     <div class="card-top"><div class="subject-icon">${escapeHTML(s.icon)}</div><span class="card-tag">${escapeHTML(s.group)}</span></div>
      <h3>${escapeHTML(s.name)}</h3>
      <div class="card-bottom"><span class="status ${ready?"ready":""}"><i class="status-dot"></i>${ready?"Prompt ready":"Prompt not added"}</span>
      <button class="copy-btn" data-copy="${escapeHTML(s.name)}" ${ready?"":"disabled"} title="${ready?"Copy prompt to clipboard":"Add a prompt first"}">${ready?"⧉ Copy prompt":"＋ Add prompt"}</button></div>
-     <button class="small-btn" data-edit="${escapeHTML(s.name)}" style="align-self:flex-start;padding:7px 10px;font-size:11px">✎ ${ready?"Edit prompt":"Add prompt text"}</button>
+     <div class="card-actions">
+       <button class="small-btn" data-edit="${escapeHTML(s.name)}" style="padding:7px 10px;font-size:11px">✎ ${ready?"Edit prompt":"Add prompt text"}</button>
+       <button class="small-btn" data-rename="${escapeHTML(s.name)}" style="padding:7px 10px;font-size:11px" title="Rename or edit subject">⚙ Rename</button>
+       <button class="small-btn danger" data-remove="${escapeHTML(s.name)}" style="padding:7px 10px;font-size:11px" title="Remove subject">🗑 Remove</button>
+     </div>
     </article>`;
   }).join("") : `<div class="empty">No subjects match “${escapeHTML(q)}”. Try another search.</div>`;
 }
-function openEditor(name){activeSubject=name;$("modalTitle").textContent=`${SUBJECTS.find(s=>s.name===name)?.icon||"✦"}  ${name}`;$("promptText").value=prompts[name]||"";$("editor").showModal();setTimeout(()=>$("promptText").focus(),80);}
+
+/* ---------- Create / Rename / Remove Subject Logic ---------- */
+function openCreateSubjectModal() {
+  editingSubjectTarget = null;
+  $("subjectModalTitle").textContent = "Create New Subject";
+  $("subjectModalDesc").textContent = "Add a new Forestry or exam subject to your library.";
+  $("subNameInput").value = "";
+  $("subIconInput").value = "";
+  $("subGroupInput").value = "";
+  $("saveSubjectBtn").textContent = "Create Subject ＋";
+  $("deleteSubjectBtn").classList.add("hidden");
+  $("subjectModal").showModal();
+  setTimeout(()=>$("subNameInput").focus(),80);
+}
+
+function openRenameSubjectModal(name) {
+  const sub = SUBJECTS.find(s => s.name === name);
+  if(!sub) return;
+  editingSubjectTarget = sub.name;
+  $("subjectModalTitle").textContent = "Rename / Edit Subject";
+  $("subjectModalDesc").textContent = "Update the subject's name, icon emoji, or group tag.";
+  $("subNameInput").value = sub.name;
+  $("subIconInput").value = sub.icon;
+  $("subGroupInput").value = sub.group;
+  $("saveSubjectBtn").textContent = "Save Changes ✓";
+  $("deleteSubjectBtn").classList.remove("hidden");
+  $("subjectModal").showModal();
+  setTimeout(()=>$("subNameInput").focus(),80);
+}
+
+async function removeSubject(name) {
+  if(!confirm(`Remove "${name}" and any saved prompt attached to it?`)) return;
+  const idx = SUBJECTS.findIndex(s => s.name === name);
+  if(idx === -1) return;
+  SUBJECTS.splice(idx, 1);
+  saveSubjects();
+  await deletePromptValue(name);
+  $("subjectModal").close();
+  render();
+  toast(`Removed subject: ${name}`);
+}
+
+$("newSubjectBtn").onclick = openCreateSubjectModal;
+$("closeSubjectModal").onclick = () => $("subjectModal").close();
+$("cancelSubjectModal").onclick = () => $("subjectModal").close();
+$("deleteSubjectBtn").onclick = () => { if(editingSubjectTarget) removeSubject(editingSubjectTarget); };
+
+$("saveSubjectBtn").onclick = async () => {
+  const name = $("subNameInput").value.trim();
+  const icon = $("subIconInput").value.trim() || "🌲";
+  const group = $("subGroupInput").value.trim() || "Forestry";
+  
+  if(!name) { toast("Subject name is required"); return; }
+
+  // Creating a new subject
+  if(!editingSubjectTarget) {
+    if(NAMES.has(name)) { toast("A subject with this name already exists"); return; }
+    const colors = ["#65f0b3","#a7ef76","#ffe66d","#ffb86b","#78dfb2","#c4f26b","#5df6ff","#ff9b70"];
+    const accent = colors[SUBJECTS.length % colors.length];
+    SUBJECTS.push({ name, icon, group, accent });
+    saveSubjects();
+    $("subjectModal").close();
+    render();
+    toast(`Created subject: ${name}`);
+    return;
+  }
+
+  // Renaming / updating an existing subject
+  const oldName = editingSubjectTarget;
+  if(name !== oldName && NAMES.has(name)) {
+    toast("Another subject with this name already exists");
+    return;
+  }
+  const sub = SUBJECTS.find(s => s.name === oldName);
+  if(!sub) return;
+
+  sub.name = name;
+  sub.icon = icon;
+  sub.group = group;
+  saveSubjects();
+
+  if(name !== oldName && (prompts[oldName] || "").trim()) {
+    const existingPrompt = prompts[oldName];
+    await savePromptValue(name, existingPrompt);
+    await deletePromptValue(oldName);
+  }
+
+  $("subjectModal").close();
+  render();
+  toast(name !== oldName ? `Renamed "${oldName}" to "${name}"` : `Updated "${name}"`);
+};
+
+/* ---------- Prompt Editor Logic ---------- */
+function openEditor(name){activeSubject=name;$("modalTitle").textContent=`${SUBJECTS.find(s=>s.name===name)?.icon||"🌲"}  ${name}`;$("promptText").value=prompts[name]||"";$("editor").showModal();setTimeout(()=>$("promptText").focus(),80);}
 async function copyPrompt(name){
   const text=prompts[name]||"";
   if(!text.trim()){openEditor(name);return;}
@@ -231,13 +598,19 @@ async function copyPrompt(name){
   catch(e){activeSubject=name;$("promptText").value=text;$("editor").showModal();$("promptText").focus();$("promptText").select();toast("Clipboard permission unavailable — prompt opened for manual copying.");}
 }
 $("grid").addEventListener("click",e=>{
-  const copy=e.target.closest("[data-copy]"), edit=e.target.closest("[data-edit]");
-  if(copy)copyPrompt(copy.dataset.copy);
-  if(edit)openEditor(edit.dataset.edit);
+  const copy=e.target.closest("[data-copy]"),
+        edit=e.target.closest("[data-edit]"),
+        rename=e.target.closest("[data-rename]"),
+        remove=e.target.closest("[data-remove]");
+  if(copy) copyPrompt(copy.dataset.copy);
+  if(edit) openEditor(edit.dataset.edit);
+  if(rename) openRenameSubjectModal(rename.dataset.rename);
+  if(remove) removeSubject(remove.dataset.remove);
 });
 $("search").addEventListener("input",render);
 $("editAll").addEventListener("click",()=>{
   const names=SUBJECTS.map(s=>s.name);
+  if(!names.length){toast("No subjects available. Create one first!");return;}
   const choice=prompt("Enter the subject number to edit:\n"+names.map((n,i)=>`${i+1}. ${n}`).join("\n"));
   if(choice===null)return;const index=Number(choice)-1;
   if(Number.isInteger(index)&&index>=0&&index<names.length)openEditor(names[index]);else toast("Enter a valid subject number.");
@@ -254,7 +627,7 @@ $("syncBtn").onclick=()=>syncAll(false);
 
 /* ---------- Export / import ---------- */
 $("exportBtn").onclick=()=>{
- const data={app:"PromptDeck",version:3,exportedAt:new Date().toISOString(),prompts};
+ const data={app:"PromptDeck",version:4,exportedAt:new Date().toISOString(),subjects:SUBJECTS,prompts};
  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="promptdeck-backup.json";a.click();URL.revokeObjectURL(url);toast("Backup exported");
 };
@@ -263,14 +636,30 @@ $("importFile").addEventListener("change",async e=>{
  const file=e.target.files[0];if(!file)return;
  try{
   const data=JSON.parse(await file.text());
+  if(data && Array.isArray(data.subjects)) {
+    SUBJECTS = data.subjects.filter(s => s && typeof s.name === "string" && s.name.trim());
+    saveSubjects();
+  }
   const incoming=data && typeof data==="object" && !Array.isArray(data) ? (data.prompts || data) : null;
   if(!incoming || typeof incoming!=="object" || Array.isArray(incoming)) throw new Error("bad");
-  const valid=Object.entries(incoming).filter(([k,v])=>NAMES.has(k) && typeof v==="string" && v.trim());
-  if(!valid.length) throw new Error("bad");
-  for(const [k,v] of valid) prompts[k]=v.trim();
+  
+  const valid=Object.entries(incoming).filter(([k,v])=>typeof v==="string" && v.trim());
+  
+  let addedNew = false;
+  for(const [k,v] of valid) {
+    if(!NAMES.has(k)) {
+      const newSub = { name: k, icon: "🌿", group: "Imported", accent: "#65f0b3" };
+      SUBJECTS.push(newSub);
+      NAMES.add(k);
+      addedNew = true;
+    }
+    prompts[k] = v.trim();
+  }
+  if(addedNew) saveSubjects();
   cacheLocal();
-  if(sb){ try{ await pushRows(valid.map(([k])=>k)); cloudOK=true; lastSync=new Date(); statusNow(); }catch(err){ cloudOK=false; statusNow(); toast("Imported locally; cloud upload failed: "+(err.message||err)); e.target.value=""; render(); return; } }
-  render(); toast(`Backup imported · ${valid.length} prompt(s) saved to cloud`);
+  
+  if(sb && valid.length){ try{ await pushRows(valid.map(([k])=>k)); cloudOK=true; lastSync=new Date(); statusNow(); }catch(err){ cloudOK=false; statusNow(); toast("Imported locally; cloud upload failed: "+(err.message||err)); e.target.value=""; render(); return; } }
+  render(); toast(`Backup imported · ${valid.length} prompt(s) saved`);
  }catch(err){ toast("That file doesn't look like a PromptDeck JSON backup."); }
  e.target.value="";
 });
